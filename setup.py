@@ -17,7 +17,7 @@ setup(
     name='charmworldlib',
     version=__VERSION__,
     packages=['charmworldlib'],
-    install_requires=['requests', 'argparse', 'pyyaml', 'urllib'],
+    install_requires=['requests', 'pyyaml'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',
     description=('Library to access charmworld data'),
