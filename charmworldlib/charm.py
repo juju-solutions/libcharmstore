@@ -9,10 +9,18 @@ class NoCharmFound(Exception):
 
 def parse_charm_id(charm_id):
     if charm_id[0] is '~':
-        owner, series, charm_data = charm_id.split('/')
+        if charm_id.count('/') == 1:
+            series = 'precise'
+            owner, charm_data = charm_id.split('/')
+        else:
+            owner, series, charm_data = charm_id.split('/')
     else:
         owner = None
-        series, charm_data = charm_id.split('/')
+        if '/' not in charm_id:
+            series = 'precise'
+            charm_data = charm_id
+        else:
+            series, charm_data = charm_id.split('/')
 
     ver_match = re.search('-([0-9])+$', charm_data)
     if ver_match:
