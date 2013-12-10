@@ -72,13 +72,21 @@ class Charms(api.API):
         return self.search({'type': 'approved'})
 
     def search(self, criteria={}, limit=None):
+        results = []
         if type(criteria) is str:
             criteria = {'text': criteria}
         if limit and type(limit) is int:
             criteria['limit'] = limit
 
         data = self.get(self._base_search_endpoint[self.version], criteria)
-        return data['result']
+
+        if not data['result']:
+            return []
+
+        for charm in data['result']:
+            results.append(Charm(charm_data=charm))
+
+        return results
 
 
 class Charm(object):
