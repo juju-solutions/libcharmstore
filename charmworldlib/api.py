@@ -23,6 +23,8 @@ class API(object):
 
     def _fetch_json(self, endpoint, params={}, method='get'):
         r = self._fetch_request(endpoint, params, method)
+        if r.status_code is not 200:
+            raise Exception('Request failed with: %s' % r.status_code)
         return r.json()
 
     def _fetch_request(self, endpoint, params={}, method='get'):
