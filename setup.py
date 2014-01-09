@@ -9,13 +9,12 @@ import ez_setup
 
 ez_setup.use_setuptools()
 
-from charmworldlib.version import __VERSION__
 from setuptools import setup, find_packages
 
 
 setup(
     name='charmworldlib',
-    version=__VERSION__,
+    version="0.1.4",
     packages=['charmworldlib'],
     install_requires=['requests', 'pyyaml'],
     maintainer='Marco Ceppi',
