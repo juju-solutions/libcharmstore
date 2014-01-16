@@ -296,10 +296,10 @@ class CharmTests(unittest.TestCase):
         mcharm.return_value.charm.return_value = self.CHARM_OBJ
         c = Charm(charm_data=self.CHARM_OBJ)
         related = c.related()
-        for relType, relations in self.RELATED_OBJ['result'].iteritems():
+        for relType, relations in self.RELATED_OBJ['result'].items():
             self.assertEqual(len(self.RELATED_OBJ['result'][relType]),
                              len(related[relType]))
-            for rel, charms in relations.iteritems():
+            for rel, charms in relations.items():
                 self.assertEqual(len(self.RELATED_OBJ['result'][relType][rel]),
                                  len(related[relType][rel]))
 

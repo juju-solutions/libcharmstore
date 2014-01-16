@@ -136,9 +136,9 @@ class Charm(object):
         a = api.API()
         data = a.get('%s/related' % self.id)
         related = {}
-        for relation, interfaces in data['result'].iteritems():
+        for relation, interfaces in data['result'].items():
             related[relation] = {}
-            for interface, charms in interfaces.iteritems():
+            for interface, charms in interfaces.items():
                 related[relation][interface] = []
                 for charm in charms:
                     related[relation][interface].append(Charm(charm['id']))
@@ -170,9 +170,9 @@ class Charm(object):
         if 'charm' not in charm_data:
             raise CharmNotFound('Not a valid charm payload')
 
-        for key, val in charm_data['charm'].iteritems():
+        for key, val in charm_data['charm'].items():
             if key == 'relations':
-                for k, v in charm_data['charm']['relations'].iteritems():
+                for k, v in charm_data['charm']['relations'].items():
                     setattr(self, k, v)
 
             if key.startswith('is_'):
