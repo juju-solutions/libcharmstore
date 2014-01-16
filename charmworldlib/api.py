@@ -45,7 +45,6 @@ class API(object):
         return '%s://%s' % (self.protocol, self.server)
 
     def _build_url(self, endpoint):
-        url = self._earl()
         if not endpoint[0] == '/':
             endpoint = '/%s' % endpoint
 

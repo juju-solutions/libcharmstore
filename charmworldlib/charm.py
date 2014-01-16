@@ -34,8 +34,8 @@ def parse_charm_id(charm_id):
 
 
 class Charms(api.API):
-    _base_endpoint = {1:'charm', 2:'charm', 3:'charm'}
-    _base_search_endpoint = {1:'charms', 2:'charms', 3:'search'}
+    _base_endpoint = {1: 'charm', 2: 'charm', 3: 'charm'}
+    _base_search_endpoint = {1: 'charms', 2: 'charms', 3: 'search'}
 
     def requires(self, interfaces=[], limit=None):
         return self.interfaces(requires=interfaces)
@@ -148,7 +148,8 @@ class Charm(object):
     def _fetch(self, charm_id):
         c = Charms()
         owner, series, charm, revision = parse_charm_id(charm_id)
-        self._raw = c.charm(charm, series=series, owner=owner, revision=revision)
+        self._raw = c.charm(charm, series=series, owner=owner,
+                            revision=revision)
         self._parse(self._raw)
 
         return self.id

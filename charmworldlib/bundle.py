@@ -5,6 +5,7 @@ from . import api
 
 class Bundles(api.API):
     _base_endpoint = 'bundle'
+
     def proof(self, deployer_contents):
         if not self.version >= 3:
             raise Exception('Need to use CharmWorld API >= 3')

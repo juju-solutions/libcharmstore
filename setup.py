@@ -3,13 +3,12 @@
 # Copyright 2013 Marco Ceppi.  This software is licensed under the
 # GNU General Public License version 3 (see the file LICENSE).
 
-import sys
 import ez_setup
 
 
 ez_setup.use_setuptools()
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(
