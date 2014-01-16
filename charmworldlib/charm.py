@@ -1,14 +1,18 @@
 
 import re
+import json
 from . import api
 
 
-class NoCharmFound(Exception):
+class CharmNotFound(Exception):
     pass
 
 
 def parse_charm_id(charm_id):
-    if charm_id[0] is '~':
+    if charm_id.startswith('cs:'):
+        charm_id = charm_id.replace('cs:', '')
+
+    if charm_id.startswith('~'):
         if charm_id.count('/') == 1:
             series = 'precise'
             owner, charm_data = charm_id.split('/')
@@ -60,8 +64,9 @@ class Charms(api.API):
 
         return self.search(params)
 
-    def charm(self, name, series='precise', revision=None, owner=None):
-        if owner and owner[0] is not '~':
+    def charm(self, name, series='precise', revision=None, owner=None,
+              raw=False):
+        if owner and not owner.startswith('~'):
             owner = "~%s" % owner
 
         endpoint = self._base_endpoint[self.version]
@@ -71,10 +76,13 @@ class Charms(api.API):
 
         endpoint = "%s/%s/%s" % (endpoint, series, name)
 
-        if revision:
+        if revision >= 0:
             endpoint = "%s-%s" % (endpoint, revision)
 
-        return self.get(endpoint)
+        data = self.get(endpoint)
+        if 'result' in data:
+            charm = data['result'][0]
+            return charm if raw else Charm(charm_data=charm)
 
     def approved(self):
         return self.search({'type': 'approved'})
@@ -115,7 +123,7 @@ class Charm(object):
         self._raw = {}
 
         if not charm_id and not charm_data:
-            raise NoCharmFound('Neither charm_data or charm_id provided')
+            raise ValueError('Neither charm_data or charm_id provided')
 
         if charm_data:
             self._parse(charm_data)
@@ -139,7 +147,7 @@ class Charm(object):
 
     def file(self, path):
         if path not in self.files:
-            raise Exception('%s not part of charm' % path)
+            raise IOError(0, 'No such file in charm', path)
         a = api.API()
         r = a._fetch_request('charm/%s/file/%s' % (self.id, path))
 
@@ -148,15 +156,19 @@ class Charm(object):
     def _fetch(self, charm_id):
         c = Charms()
         owner, series, charm, revision = parse_charm_id(charm_id)
-        self._raw = c.charm(charm, series=series, owner=owner,
-                            revision=revision)
+        try:
+            self._raw = c.charm(charm, series=series, owner=owner,
+                                revision=revision, raw=True)
+        except Exception as e:
+            raise CharmNotFound('API request failed: %s' % str(e))
+
         self._parse(self._raw)
 
         return self.id
 
     def _parse(self, charm_data):
         if 'charm' not in charm_data:
-            raise NoCharmFound('Not a valid charm payload')
+            raise CharmNotFound('Not a valid charm payload')
 
         for key, val in charm_data['charm'].iteritems():
             if key == 'relations':
@@ -166,4 +178,16 @@ class Charm(object):
             if key.startswith('is_'):
                 key = key.replace('is_', '')
 
+            if key == 'code_source':
+                setattr(self, 'source', val)
+
+            if key == 'distro_series':
+                key = 'series'
+
             setattr(self, key, val)
+
+    def __str__(self):
+        return json.dumps(self._raw, indent=2)
+
+    def __repr__(self):
+        return self.__str__()

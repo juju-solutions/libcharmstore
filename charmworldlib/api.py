@@ -28,7 +28,8 @@ class API(object):
         return r.json()
 
     def _fetch_request(self, endpoint, params={}, method='get'):
-        if not method.lower() in ['get', 'post']:
+        method = method.lower()
+        if method not in ['get', 'post']:
             raise MethodMismatch('%s is not get or post' % method)
 
         if method == 'post':
