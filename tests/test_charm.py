@@ -276,7 +276,8 @@ class CharmTests(unittest.TestCase):
         cjson = str(Charm.from_charmdata(charm_data=self.CHARM_OBJ))
         self.assertEqual(self.CHARM_OBJ, json.loads(cjson))
         cjson = repr(Charm.from_charmdata(charm_data=self.CHARM_OBJ))
-        self.assertEqual(self.CHARM_OBJ, json.loads(cjson))
+        self.assertEqual(str('<Charm %s>' % self.CHARM_OBJ['charm']['id']),
+                         cjson)
 
     @patch('charmworldlib.charm.api.API')
     def test_charm_file(self, mAPI):

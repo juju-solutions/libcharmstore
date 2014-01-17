@@ -193,4 +193,4 @@ class Charm(object):
         return json.dumps(self._raw, indent=2)
 
     def __repr__(self):
-        return '<Chard %s>' % self.id
+        return '<Charm %s>' % self.id
