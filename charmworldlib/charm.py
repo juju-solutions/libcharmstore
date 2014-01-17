@@ -114,7 +114,7 @@ class Charm(object):
         charm = cls()
         charm._parse(charm_data)
         charm._raw = charm_data
-        
+
         return charm
 
     def __init__(self, charm_id=None):

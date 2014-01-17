@@ -253,7 +253,8 @@ class CharmTests(unittest.TestCase):
         self.assertEqual(oc['relations']['requires'], c.requires)
 
     def test_charm_parse_fail(self):
-        self.assertRaises(CharmNotFound, Charm.from_charmdata, {'bad_data': {}})
+        self.assertRaises(CharmNotFound, Charm.from_charmdata,
+                          {'bad_data': {}})
 
     @patch('charmworldlib.charm.Charms')
     def test_charm_fetch(self, mcharms):
