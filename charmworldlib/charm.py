@@ -80,9 +80,12 @@ class Charms(api.API):
             endpoint = "%s-%s" % (endpoint, revision)
 
         data = self.get(endpoint)
-        if 'result' in data:
-            charm = data['result'][0]
-            return charm if raw else Charm(charm_data=charm)
+
+        if 'result' not in data:
+            return None
+
+        charm_raw = data['result'][0]
+        return Charm.from_charmdata(charm_raw)
 
     def approved(self):
         return self.search({'type': 'approved'})
@@ -106,7 +109,15 @@ class Charms(api.API):
 
 
 class Charm(object):
-    def __init__(self, charm_id=None, charm_data=None):
+    @classmethod
+    def from_charmdata(cls, charm_data):
+        charm = cls()
+        charm._parse(charm_data)
+        charm._raw = charm_data
+        
+        return charm
+
+    def __init__(self, charm_id=None):
         self.id = None
         self.name = None
         self.owner = None
@@ -121,20 +132,13 @@ class Charm(object):
         self.provides = {}
         self.requires = {}
         self._raw = {}
-
-        if not charm_id and not charm_data:
-            raise ValueError('Neither charm_data or charm_id provided')
-
-        if charm_data:
-            self._parse(charm_data)
-            self._raw = charm_data
+        self._api = api.API()
 
         if charm_id:
             self._fetch(charm_id)
 
     def related(self):
-        a = api.API()
-        data = a.get('%s/related' % self.id)
+        data = self._api.get('%s/related' % self.id)
         related = {}
         for relation, interfaces in data['result'].iteritems():
             related[relation] = {}
@@ -148,8 +152,7 @@ class Charm(object):
     def file(self, path):
         if path not in self.files:
             raise IOError(0, 'No such file in charm', path)
-        a = api.API()
-        r = a._fetch_request('charm/%s/file/%s' % (self.id, path))
+        r = self._api.fetch_request('charm/%s/file/%s' % (self.id, path))
 
         return r.text
 

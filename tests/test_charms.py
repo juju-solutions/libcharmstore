@@ -54,7 +54,7 @@ class CharmsTests(unittest.TestCase):
         self.assertEqual([], self.c.approved())
         mget.assert_called_with('search', {'type': 'approved'})
 
-    @patch('charmworldlib.charm.Charm')
+    @patch('charmworldlib.charm.Charm.from_charmdata')
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_charm(self, mget, mCharm):
         cdata = {'charm': {'id': 'oneiric/charm-0'}}
@@ -62,9 +62,9 @@ class CharmsTests(unittest.TestCase):
         self.assertEqual(mCharm(), self.c.charm('charm', series='oneiric',
                                                 revision=0))
         mget.assert_called_with('charm/oneiric/charm-0')
-        mCharm.assert_called_with(charm_data=cdata)
+        mCharm.assert_called_with(cdata)
 
-    @patch('charmworldlib.charm.Charm')
+    @patch('charmworldlib.charm.Charm.from_charmdata')
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_charm_full(self, mget, mCharm):
         cdata = {'charm': {'id': '~me/oneiric/charm-0'}}
@@ -72,9 +72,9 @@ class CharmsTests(unittest.TestCase):
         self.assertEqual(mCharm(), self.c.charm('charm', series='oneiric',
                                                 revision=0, owner='~me'))
         mget.assert_called_with('charm/~me/oneiric/charm-0')
-        mCharm.assert_called_with(charm_data=cdata)
+        mCharm.assert_called_with(cdata)
 
-    @patch('charmworldlib.charm.Charm')
+    @patch('charmworldlib.charm.Charm.from_charmdata')
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_charm_full_owner(self, mget, mCharm):
         cdata = {'charm': {'id': '~me/oneiric/charm-0'}}
@@ -82,7 +82,7 @@ class CharmsTests(unittest.TestCase):
         self.assertEqual(mCharm(), self.c.charm('charm', series='oneiric',
                                                 revision=0, owner='me'))
         mget.assert_called_with('charm/~me/oneiric/charm-0')
-        mCharm.assert_called_with(charm_data=cdata)
+        mCharm.assert_called_with(cdata)
 
     @patch('charmworldlib.charm.Charms.search')
     def test_charms_interfaces(self, msearch):

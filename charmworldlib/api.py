@@ -16,18 +16,18 @@ class API(object):
         self.proxy = proxy_info
 
     def get(self, endpoint, params={}):
-        return self._fetch_json(endpoint, params, 'get')
+        return self.fetch_json(endpoint, params, 'get')
 
     def post(self, endpoint, params={}):
-        return self._fetch_json(endpoint, params, 'post')
+        return self.fetch_json(endpoint, params, 'post')
 
-    def _fetch_json(self, endpoint, params={}, method='get'):
-        r = self._fetch_request(endpoint, params, method)
+    def fetch_json(self, endpoint, params={}, method='get'):
+        r = self.fetch_request(endpoint, params, method)
         if r.status_code is not 200:
             raise Exception('Request failed with: %s' % r.status_code)
         return r.json()
 
-    def _fetch_request(self, endpoint, params={}, method='get'):
+    def fetch_request(self, endpoint, params={}, method='get'):
         method = method.lower()
         if method not in ['get', 'post']:
             raise MethodMismatch('%s is not get or post' % method)

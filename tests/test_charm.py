@@ -241,7 +241,7 @@ class CharmTests(unittest.TestCase):
 
     def test_charm_parse(self):
         oc = self.CHARM_OBJ['charm']
-        c = Charm(charm_data=self.CHARM_OBJ)
+        c = Charm.from_charmdata(self.CHARM_OBJ)
         self.assertEqual(oc['id'], c.id)
         self.assertEqual(oc['url'], c.url)
         self.assertEqual(oc['is_subordinate'], c.subordinate)
@@ -253,7 +253,7 @@ class CharmTests(unittest.TestCase):
         self.assertEqual(oc['relations']['requires'], c.requires)
 
     def test_charm_parse_fail(self):
-        self.assertRaises(CharmNotFound, Charm, charm_data={'bad_data': {}})
+        self.assertRaises(CharmNotFound, Charm.from_charmdata, {'bad_data': {}})
 
     @patch('charmworldlib.charm.Charms')
     def test_charm_fetch(self, mcharms):
@@ -272,20 +272,20 @@ class CharmTests(unittest.TestCase):
         self.assertRaises(CharmNotFound, Charm, charm_id='precise/bad-charm')
 
     def test_charm_to_string(self):
-        cjson = str(Charm(charm_data=self.CHARM_OBJ))
+        cjson = str(Charm.from_charmdata(charm_data=self.CHARM_OBJ))
         self.assertEqual(self.CHARM_OBJ, json.loads(cjson))
-        cjson = repr(Charm(charm_data=self.CHARM_OBJ))
+        cjson = repr(Charm.from_charmdata(charm_data=self.CHARM_OBJ))
         self.assertEqual(self.CHARM_OBJ, json.loads(cjson))
 
     @patch('charmworldlib.charm.api.API')
     def test_charm_file(self, mAPI):
         api = mAPI.return_value
-        api._fetch_request.return_value.text = "I'm a hook"
-        c = Charm(charm_data=self.CHARM_OBJ)
+        api.fetch_request.return_value.text = "I'm a hook"
+        c = Charm.from_charmdata(charm_data=self.CHARM_OBJ)
         self.assertEqual("I'm a hook", c.file('hooks/install'))
 
     def test_charm_file_404(self):
-        c = Charm(charm_data=self.CHARM_OBJ)
+        c = Charm.from_charmdata(self.CHARM_OBJ)
         self.assertRaises(IOError, c.file, 'lolwut')
 
     @patch('charmworldlib.charm.Charms')
@@ -294,7 +294,7 @@ class CharmTests(unittest.TestCase):
         mget = mapi.return_value
         mget.get.return_value = self.RELATED_OBJ
         mcharm.return_value.charm.return_value = self.CHARM_OBJ
-        c = Charm(charm_data=self.CHARM_OBJ)
+        c = Charm.from_charmdata(self.CHARM_OBJ)
         related = c.related()
         for relType, relations in self.RELATED_OBJ['result'].iteritems():
             self.assertEqual(len(self.RELATED_OBJ['result'][relType]),
@@ -302,6 +302,3 @@ class CharmTests(unittest.TestCase):
             for rel, charms in relations.iteritems():
                 self.assertEqual(len(self.RELATED_OBJ['result'][relType][rel]),
                                  len(related[relType][rel]))
-
-    def test_charm_fails(self):
-        self.assertRaises(ValueError, Charm)
