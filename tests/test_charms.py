@@ -76,10 +76,9 @@ class CharmsTests(unittest.TestCase):
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_charm_404(self, mget):
-        cdata = {'charm': {'id': '~me/oneiric/charm-0'}}
         mget.return_value = {'none': None}
         self.assertEqual(None, self.c.charm('charm', series='oneiric',
-                                                revision=0, owner='~me'))
+                                            revision=0, owner='~me'))
         mget.assert_called_with('charm/~me/oneiric/charm-0')
 
     @patch('charmworldlib.charm.Charm.from_charmdata')
