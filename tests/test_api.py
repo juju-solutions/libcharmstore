@@ -32,8 +32,10 @@ class APITests(unittest.TestCase):
     def test_fetch_request_post(self, mreq):
         endpoint = 'posty'
         params = {'bar': 'baz'}
+        self.a.port = 8080
         self.a.fetch_request(endpoint, method='post', params=params)
         mreq.assert_called_with(self.a._build_url(endpoint), data=params)
+        self.a.port = None
 
     @patch('charmworldlib.api.API.fetch_request')
     def test_fetch_json(self, mfetch):
@@ -45,6 +47,14 @@ class APITests(unittest.TestCase):
 
     @patch('charmworldlib.api.API.fetch_request')
     def test_fetch_json_failed(self, mfetch):
+        req = mfetch.return_value
+        req.status_code = 500
+        self.a.port = 8080
+        self.assertRaises(Exception, self.a.fetch_json, 'bad')
+        self.a.port = None
+
+    @patch('charmworldlib.api.API.fetch_request')
+    def test_fetch_json_failed_port(self, mfetch):
         req = mfetch.return_value
         req.status_code = 500
         self.assertRaises(Exception, self.a.fetch_json, 'bad')
