@@ -28,7 +28,11 @@ lint:
 	@find setup.py charmworldlib tests -name '*.py' -print0 | xargs -r0 flake8
 
 test:
-	@nosetests -s tests/test_*.py
+	@echo Testing Python 2...
+	@nosetests --nologcapture
+	@echo Testing Python 3...
+	@nosetests3 --nologcapture
+
 
 coverage:
 	@nosetests --with-coverage --cover-package=charmworldlib --cover-tests -s tests/test_*.py
