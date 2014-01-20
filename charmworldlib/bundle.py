@@ -5,9 +5,11 @@ from . import api
 
 class Bundles(api.API):
     _base_endpoint = 'bundle'
+
     def proof(self, deployer_contents):
         if not self.version >= 3:
-            raise Exception('Need to use CharmWorld API >= 3')
+            raise ValueError('Need to use charmworld API >= 3, selected: %s' %
+                             self.version)
         if type(deployer_contents) is not dict:
             raise Exception('Invalid deployer_contents')
 
