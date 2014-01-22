@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+source .venv/bin/activate
+find setup.py charmworldlib tests -name '*.py' -print0 | xargs -r0 flake8

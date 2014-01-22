@@ -1,0 +1,12 @@
+#!/bin/bash
+set -x
+
+mkdir .pip-cache
+virtualenv --extra-search-dir=.pip-cache .venv
+
+. .venv/bin/activate && \
+        pip install -r test-requirements.pip --download-cache .pip-cache --find-links .pip-cache
+
+
+
+
