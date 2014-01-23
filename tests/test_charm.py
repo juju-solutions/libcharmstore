@@ -256,14 +256,11 @@ class CharmTests(unittest.TestCase):
         self.assertRaises(CharmNotFound, Charm.from_charmdata,
                           {'bad_data': {}})
 
-    @patch('charmworldlib.charm.Charms')
-    def test_charm_fetch(self, mcharms):
-        charms_charm = mcharms.return_value
-        charms_charm.charm.return_value = self.CHARM_OBJ
+    @patch('charmworldlib.charm.api.API')
+    def test_charm_fetch(self, mAPI):
+        api = mAPI.return_value
+        api.get.return_value = {'result': [self.CHARM_OBJ]}
         c = Charm(charm_id='precise/wordpress-21')
-        charms_charm.charm.assert_called_with('wordpress', series='precise',
-                                              owner=None, revision=21,
-                                              raw=True)
         self.assertEqual('precise/fartpress-21', c.id)
 
     @patch('charmworldlib.charm.Charms.get')
@@ -290,12 +287,16 @@ class CharmTests(unittest.TestCase):
         c = Charm.from_charmdata(self.CHARM_OBJ)
         self.assertRaises(IOError, c.file, 'lolwut')
 
-    @patch('charmworldlib.charm.Charms')
     @patch('charmworldlib.charm.api.API')
-    def test_charm_related(self, mapi, mcharm):
+    def test_charm_related(self, mapi):
+        def drugs(*args):
+            def charm(*args):
+                return {'result': [self.CHARM_OBJ]}
+            mget.get.side_effect = charm
+            return self.RELATED_OBJ
         mget = mapi.return_value
-        mget.get.return_value = self.RELATED_OBJ
-        mcharm.return_value.charm.return_value = self.CHARM_OBJ
+        mget.get.side_effect = drugs
+
         c = Charm.from_charmdata(self.CHARM_OBJ)
         related = c.related()
         for relType, relations in self.RELATED_OBJ['result'].items():

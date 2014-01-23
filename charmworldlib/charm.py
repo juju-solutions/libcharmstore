@@ -64,22 +64,8 @@ class Charms(api.API):
 
         return self.search(params)
 
-    def charm(self, name, series='precise', revision=None, owner=None,
-              raw=False):
-        if owner and not owner.startswith('~'):
-            owner = "~%s" % owner
-
-        endpoint = self._base_endpoint[self.version]
-
-        if owner:
-            endpoint = "%s/%s" % (endpoint, owner)
-
-        endpoint = "%s/%s/%s" % (endpoint, series, name)
-
-        if revision >= 0:
-            endpoint = "%s-%s" % (endpoint, revision)
-
-        data = self.get(endpoint)
+    def charm(self, name, series='precise', revision=None, owner=None):
+        data = self.get(self.charm_endpoint(name, series, revision, owner))
 
         if 'result' not in data:
             return None
@@ -107,13 +93,29 @@ class Charms(api.API):
 
         return results
 
+    def charm_endpoint(self, name, series='precise', revision=None,
+                       owner=None):
+        if owner and not owner.startswith('~'):
+            owner = "~%s" % owner
+
+        endpoint = self._base_endpoint[self.version]
+
+        if owner:
+            endpoint = "%s/%s" % (endpoint, owner)
+
+        endpoint = "%s/%s/%s" % (endpoint, series, name)
+
+        if revision >= 0:
+            endpoint = "%s-%s" % (endpoint, revision)
+
+        return endpoint
+
 
 class Charm(object):
     @classmethod
     def from_charmdata(cls, charm_data):
         charm = cls()
         charm._parse(charm_data)
-        charm._raw = charm_data
 
         return charm
 
@@ -160,14 +162,15 @@ class Charm(object):
         c = Charms()
         owner, series, charm, revision = parse_charm_id(charm_id)
         try:
-            self._raw = c.charm(charm, series=series, owner=owner,
-                                revision=revision, raw=True)
+            data = self._api.get(c.charm_endpoint(charm, series=series,
+                                                  owner=owner,
+                                                  revision=revision))
+            if 'result' not in data:
+                return None
+
+            self._parse(data['result'][0])
         except Exception as e:
             raise CharmNotFound('API request failed: %s' % str(e))
-
-        self._parse(self._raw)
-
-        return self.id
 
     def _parse(self, charm_data):
         if 'charm' not in charm_data:
@@ -188,6 +191,8 @@ class Charm(object):
                 key = 'series'
 
             setattr(self, key, val)
+
+        self._raw = charm_data
 
     def __str__(self):
         return json.dumps(self._raw, indent=2)
