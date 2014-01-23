@@ -4,32 +4,25 @@ install:
 	@python3 setup.py install
 	@python2 setup.py install
 
-#test:
-#	@echo Testing Python 2...
-#	@nosetests --nologcapture
-#	@echo Testing Python 3...
-#	@nosetests3 --nologcapture
-
-
-#coverage:
-#	@nosetests --with-coverage --cover-package=charmworldlib --cover-tests -s tests/test_*.py
-
 check: test lint
 
-build: 
+build:
+	@python setup.py sdist
+
+venv: 
 	./bin/configure
 
-test: build
+test: venv
 	./bin/test
 
-coverage: build
+coverage: venv
 	./bin/test coverage
 
-lint:
+lint: venv
 	@./bin/lint
 
 clean:
-	rm -rf .venv
+	rm -rf .venv-* __pycache__
 	find . -name '*.pyc' -delete
 	find . -name '*.bak' -delete
 	find . -name '*.py[co]' -delete

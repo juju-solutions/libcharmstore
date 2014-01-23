@@ -1,12 +1,14 @@
 #!/bin/bash
 
-source .venv/bin/activate
 if [ -n "$1" -a "$1" == "coverage" ]; then
+    source .venv-py2/bin/activate
     nosetests --with-coverage --cover-package=charmworldlib --cover-tests
 else
     echo "Python2 Testing"
+    source .venv-py2/bin/activate
     nosetests
     echo "Python3 Testing"
+    source .venv-py3/bin/activate
     nosetests3
 fi
 
