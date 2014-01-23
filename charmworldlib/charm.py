@@ -105,7 +105,7 @@ class Charms(api.API):
 
         endpoint = "%s/%s/%s" % (endpoint, series, name)
 
-        if revision >= 0:
+        if isinstance(revision, int) and revision >= 0:
             endpoint = "%s-%s" % (endpoint, revision)
 
         return endpoint
