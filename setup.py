@@ -13,7 +13,7 @@ from setuptools import setup
 
 setup(
     name='charmworldlib',
-    version="0.2.1",
+    version="0.2.3",
     packages=['charmworldlib'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',
