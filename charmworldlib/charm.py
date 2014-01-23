@@ -165,10 +165,10 @@ class Charm(object):
             data = self._api.get(c.charm_endpoint(charm, series=series,
                                                   owner=owner,
                                                   revision=revision))
-            if 'result' not in data:
+            if 'charm' not in data:
                 return None
 
-            self._parse(data['result'][0])
+            self._parse(data)
         except Exception as e:
             raise CharmNotFound('API request failed: %s' % str(e))
 

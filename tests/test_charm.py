@@ -259,7 +259,7 @@ class CharmTests(unittest.TestCase):
     @patch('charmworldlib.charm.api.API')
     def test_charm_fetch(self, mAPI):
         api = mAPI.return_value
-        api.get.return_value = {'result': [self.CHARM_OBJ]}
+        api.get.return_value = self.CHARM_OBJ
         c = Charm(charm_id='precise/wordpress-21')
         self.assertEqual('precise/fartpress-21', c.id)
 
@@ -291,7 +291,7 @@ class CharmTests(unittest.TestCase):
     def test_charm_related(self, mapi):
         def drugs(*args):
             def charm(*args):
-                return {'result': [self.CHARM_OBJ]}
+                return self.CHARM_OBJ
             mget.get.side_effect = charm
             return self.RELATED_OBJ
         mget = mapi.return_value
