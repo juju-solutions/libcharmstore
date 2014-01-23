@@ -23,7 +23,7 @@ lint: venv
 
 clean:
 	rm -rf .venv-* 
-	find . -name __pycache__ -type d -delete
+	find . -name __pycache__ -type d -print0 | rm -rf
 	find . -name '*.pyc' -delete
 	find . -name '*.bak' -delete
 	find . -name '*.py[co]' -delete
