@@ -13,7 +13,7 @@ from setuptools import setup
 
 setup(
     name='charmworldlib',
-    version="0.1.4",
+    version="0.2.0",
     packages=['charmworldlib'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',
@@ -21,8 +21,9 @@ setup(
     license='GPL v3',
     url='https://launchpad.net/charmworldlib',
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Programming Language :: Python",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
 )
