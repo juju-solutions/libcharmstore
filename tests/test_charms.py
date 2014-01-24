@@ -16,9 +16,9 @@ class CharmsTests(unittest.TestCase):
     def test_charms_search(self, mget, mCharm):
         cdata = {'charm': {'id': 'oneiric/charm-0'}}
         mget.return_value = {'result': [cdata]}
-        self.assertEqual([mCharm()], self.c.search())
+        self.assertEqual([mCharm.from_charmdata()], self.c.search())
         mget.assert_called_with('search', {})
-        mCharm.assert_called_with(charm_data=cdata)
+        mCharm.from_charmdata.assert_called_with(cdata)
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_search_string(self, mget):
@@ -44,9 +44,9 @@ class CharmsTests(unittest.TestCase):
         self.c.version = 2
         cdata = {'charm': {'id': 'oneiric/charm-0'}}
         mget.return_value = {'result': [cdata]}
-        self.assertEqual([mCharm()], self.c.search())
+        self.assertEqual([mCharm.from_charmdata()], self.c.search())
         mget.assert_called_with('charms', {})
-        mCharm.assert_called_with(charm_data=cdata)
+        mCharm.from_charmdata.assert_called_with(cdata)
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_approved(self, mget):
