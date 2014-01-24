@@ -89,7 +89,7 @@ class Charms(api.API):
             return []
 
         for charm in data['result']:
-            results.append(Charm(charm_data=charm))
+            results.append(Charm.from_charmdata(charm))
 
         return results
 
