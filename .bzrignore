@@ -1,7 +1,3 @@
 .pip-cache/
-.venv/
-.ropeproject/
+.venv*/
 .coverage
-charms
-substrateDispatcher.egg-info/
-dispatcher.log

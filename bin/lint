@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-source .venv-py2/bin/activate
-echo "Python 2"
-find setup.py charmworldlib tests -name '*.py' -print0 | xargs -r0 flake8
-echo "Python 3"
-source .venv-py3/bin/activate
-find setup.py charmworldlib tests -name '*.py' -print0 | xargs -r0 flake8
