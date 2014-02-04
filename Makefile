@@ -1,3 +1,8 @@
+VENVS = .venv2 .venv3
+VENV2 = $(word 1, $(VENVS))
+VENV3 = $(word 2, $(VENVS))
+
+
 all: build test
 
 install:
@@ -11,11 +16,6 @@ build:
 
 .pip-cache:
 	@mkdir .pip-cache
-
-VENVS = .venv2 .venv3
-VENV2 = $(word 1, $(VENVS))
-VENV3 = $(word 2, $(VENVS))
-
 
 $(VENVS): .pip-cache test-requirements.pip requirements.pip
 	virtualenv --distribute -p $(patsubst .venv%,python%,$@) --extra-search-dir=.pip-cache $@
