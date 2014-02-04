@@ -2,12 +2,16 @@ VENVS = .venv2 .venv3
 VENV2 = $(word 1, $(VENVS))
 VENV3 = $(word 2, $(VENVS))
 
+%2: PY = python2
+%3: PY = python3
+
 
 all: setup
 
-install:
-	@python3 setup.py install
-	@python2 setup.py install
+install_%:
+	@$(PY) setup.py install
+
+install: install_2 install_3
 
 check: lint test
 
@@ -18,7 +22,7 @@ build:
 	@mkdir .pip-cache
 
 $(VENVS): .pip-cache test-requirements.pip requirements.pip
-	virtualenv --distribute -p $(patsubst .venv%,python%,$@) --extra-search-dir=.pip-cache $@
+	virtualenv --distribute -p $(PY) --extra-search-dir=.pip-cache $@
 	$@/bin/pip install -r test-requirements.pip  \
 		--download-cache .pip-cache --find-links .pip-cache || \
 		(touch test-requirements.pip; exit 1)
@@ -44,6 +48,6 @@ clean:
 clean-all: clean
 	rm -rf .pip-cache
 
-.PHONY: setup test lint clean clean-all
+.PHONY: setup test lint clean clean-all install install_2 install_3
 
 .DEFAULT_GOAL := all
