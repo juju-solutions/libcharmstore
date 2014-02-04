@@ -3,7 +3,7 @@ VENV2 = $(word 1, $(VENVS))
 VENV3 = $(word 2, $(VENVS))
 
 
-all: build test
+all: setup
 
 install:
 	@python3 setup.py install
@@ -19,7 +19,7 @@ build:
 
 $(VENVS): .pip-cache test-requirements.pip requirements.pip
 	virtualenv --distribute -p $(patsubst .venv%,python%,$@) --extra-search-dir=.pip-cache $@
-	$@/bin/pip install --use-mirrors -r test-requirements.pip  \
+	$@/bin/pip install -r test-requirements.pip  \
 		--download-cache .pip-cache --find-links .pip-cache || \
 		(touch test-requirements.pip; exit 1)
 	@touch $@
@@ -37,13 +37,13 @@ lint: setup
 clean:
 	rm -rf $(VENVS)
 	-find . -name __pycache__ -type d | xargs rm -rf {}
-	find . -name '*.pyc' -delete
-	find . -name '*.bak' -delete
 	find . -name '*.py[co]' -delete
-	find . -type f -name '*~' -delete
 	find . -name '*.bak' -delete
+	find . -type f -name '*~' -delete
 
 clean-all: clean
 	rm -rf .pip-cache
 
 .PHONY: setup test lint clean clean-all
+
+.DEFAULT_GOAL := all

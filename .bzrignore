@@ -3,3 +3,4 @@
 .coverage
 dist
 charmworldlib.egg-info
+*/__pycache__
