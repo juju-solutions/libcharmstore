@@ -1,7 +1,6 @@
 .pip-cache/
-.venv/
-.ropeproject/
+.venv*/
 .coverage
-charms
-substrateDispatcher.egg-info/
-dispatcher.log
+dist
+charmworldlib.egg-info
+*/__pycache__

@@ -1,34 +1,53 @@
-all: install test
+VENVS = .venv2 .venv3
+VENV2 = $(word 1, $(VENVS))
+VENV3 = $(word 2, $(VENVS))
 
-install:
-	@python3 setup.py install
-	@python2 setup.py install
+%2: PY = python2
+%3: PY = python3
 
-check: test lint
+
+all: setup
+
+install_%:
+	@$(PY) setup.py install
+
+install: install_2 install_3
+
+check: lint test
 
 build:
 	@python setup.py sdist
 
-venv: 
-	./bin/configure
+.pip-cache:
+	@mkdir .pip-cache
 
-test: venv
-	./bin/test
+$(VENVS): .pip-cache test-requirements.pip requirements.pip
+	virtualenv --distribute -p $(PY) --extra-search-dir=.pip-cache $@
+	$@/bin/pip install -r test-requirements.pip  \
+		--download-cache .pip-cache --find-links .pip-cache || \
+		(touch test-requirements.pip; exit 1)
+	@touch $@
 
-coverage: venv
-	./bin/test coverage
+setup: $(VENVS)
 
-lint: venv
-	@./bin/lint
+test: setup
+	$(VENV3)/bin/nosetests -s --verbosity=2
+	$(VENV2)/bin/nosetests -s --verbosity=2 --with-coverage --cover-package=charmworldlib
+	@rm .coverage
+
+lint: setup
+	$(VENV2)/bin/flake8 --show-source ./charmworldlib
 
 clean:
-	rm -rf .venv-* 
-	find . -name __pycache__ -type d -print0 | rm -rf
-	find . -name '*.pyc' -delete
-	find . -name '*.bak' -delete
+	rm -rf $(VENVS)
+	-find . -name __pycache__ -type d | xargs rm -rf {}
 	find . -name '*.py[co]' -delete
-	find . -type f -name '*~' -delete
 	find . -name '*.bak' -delete
+	find . -type f -name '*~' -delete
 
 clean-all: clean
 	rm -rf .pip-cache
+
+.PHONY: setup test lint clean clean-all install install_2 install_3
+
+.DEFAULT_GOAL := all
