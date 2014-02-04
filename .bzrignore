@@ -1,3 +1,5 @@
 .pip-cache/
 .venv*/
 .coverage
+dist
+charmworldlib.egg-info

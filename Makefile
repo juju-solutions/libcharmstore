@@ -36,7 +36,7 @@ lint: setup
 
 clean:
 	rm -rf $(VENVS)
-	find . -name __pycache__ -exec rm -rf {} \;
+	-find . -name __pycache__ -type d | xargs rm -rf {}
 	find . -name '*.pyc' -delete
 	find . -name '*.bak' -delete
 	find . -name '*.py[co]' -delete
