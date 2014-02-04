@@ -1,6 +1,5 @@
 """Unit test for Charm"""
 
-from copy import deepcopy
 import json
 from mock import patch
 import unittest
@@ -267,7 +266,9 @@ class CharmTests(unittest.TestCase):
     @patch('charmworldlib.charm.api.API')
     def test_charm_fetch_no_charm_data(self, mAPI):
         api = mAPI.return_value
-        api.get.return_value = deepcopy(self.CHARM_OBJ)
+        # Make a copy of the test data so it doesn't get mutated for other
+        # tests.
+        api.get.return_value = dict(self.CHARM_OBJ)
         del api.get.return_value['charm']
         self.assertRaises(
             CharmNotFound, Charm, charm_id='precise/wordpress-21')
