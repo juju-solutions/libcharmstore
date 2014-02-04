@@ -13,33 +13,26 @@ build:
 	@mkdir .pip-cache
 
 VENVS = .venv2 .venv3
+VENV2 = $(word 1, $(VENVS))
+VENV3 = $(word 2, $(VENVS))
 
 
-.venv2: .pip-cache test-requirements.pip requirements.pip
-	virtualenv --distribute -p python2 --extra-search-dir=.pip-cache $@
+$(VENVS): .pip-cache test-requirements.pip requirements.pip
+	virtualenv --distribute -p $(patsubst .venv%,python%,$@) --extra-search-dir=.pip-cache $@
 	$@/bin/pip install --use-mirrors -r test-requirements.pip  \
 		--download-cache .pip-cache --find-links .pip-cache || \
 		(touch test-requirements.pip; exit 1)
 	@touch $@
-
-.venv3: .pip-cache test-requirements.pip requirements.pip
-	virtualenv --distribute -p python3 --extra-search-dir=.pip-cache $@
-	$@/bin/pip install --use-mirrors -r test-requirements.pip  \
-		--download-cache .pip-cache --find-links .pip-cache || \
-		(touch test-requirements.pip; exit 1)
-	@touch $@
-
 
 setup: $(VENVS)
 
 test: setup
-	.venv2/bin/nosetests -s --verbosity=2 \
-	    --with-coverage --cover-package=charmworldlib
+	$(VENV3)/bin/nosetests -s --verbosity=2
+	$(VENV2)/bin/nosetests -s --verbosity=2 --with-coverage --cover-package=charmworldlib
 	@rm .coverage
-	.venv3/bin/nosetests -s --verbosity=2
 
 lint: setup
-	.venv2/bin/flake8 --show-source ./charmworldlib
+	$(VENV2)/bin/flake8 --show-source ./charmworldlib
 
 clean:
 	rm -rf $(VENVS)
@@ -52,3 +45,5 @@ clean:
 
 clean-all: clean
 	rm -rf .pip-cache
+
+.PHONY: setup test lint clean clean-all
