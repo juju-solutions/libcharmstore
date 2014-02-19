@@ -30,7 +30,7 @@ try:
 except ImportError:
     USER_SITE = None
 
-DEFAULT_VERSION = "2.0"
+DEFAULT_VERSION = "0.9.8"
 DEFAULT_URL = "https://pypi.python.org/packages/source/s/setuptools/"
 
 def _python_cmd(*args):
