@@ -43,6 +43,14 @@ ALLOWED_CONSTRAINTS = (
 )
 
 
+# Constraints should be a string of the form:
+# 'k1=v1 k2=v2 ... kn=vn'
+# Due to historical reasons, many bundles use a comma-separated list rather
+# than the space-separated list juju-core expects.  This regular expression
+# handles both separators.
+# XXX: BradCrittenden 2014-02-26: The regex is insuffficient to parse the
+# 'tags' constraint that is supported for MaaS deployments as the value is a
+# comma-separated list.
 CONSTRAINTS_REGEX = re.compile('([\w-]+=\w+)[,\s]*?')
 
 
