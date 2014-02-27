@@ -54,7 +54,7 @@ ALLOWED_CONSTRAINTS = (
 CONSTRAINTS_REGEX = re.compile('([\w-]+=\w+)[,\s]*?')
 
 
-def validate_constraints(original_constraints):
+def parse_constraints(original_constraints):
     """Parse the constraints and validate them.
 
     constraints is a space-separated string of key=value pairs or a dict.
@@ -64,6 +64,9 @@ def validate_constraints(original_constraints):
 
     constraints = original_constraints
     if not isinstance(constraints, collections.Mapping):
+        constraints = constraints.strip()
+        if not constraints:
+            return {}
         pairs = CONSTRAINTS_REGEX.findall(constraints)
         constraints = dict(i.split('=') for i in pairs)
     if len(constraints) == 0 or not all(constraints.values()):
@@ -75,3 +78,13 @@ def validate_constraints(original_constraints):
             ', '.join(sorted(unsupported)))
         raise ValueError(msg)
     return constraints
+
+
+def check_constraints(original_constraints):
+    """Check to see that constraints are space-separated and valid."""
+    try:
+        parsed = parse_constraints(original_constraints)
+    except ValueError:
+        return False
+    tokens = original_constraints.strip().split()
+    return len(parsed) == len(tokens)

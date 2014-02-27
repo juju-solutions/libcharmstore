@@ -6,7 +6,8 @@ from mock import patch
 from charmworldlib.bundle import (
     Bundle,
     Bundles,
-    validate_constraints,
+    check_constraints,
+    parse_constraints,
 )
 
 
@@ -39,7 +40,7 @@ class BundleTest(unittest.TestCase):
         pass
 
 
-class TestValidateConstraints(unittest.TestCase):
+class TestParseConstraints(unittest.TestCase):
 
     def test_valid_constraints(self):
         # Valid constraints are returned as they are.
@@ -51,17 +52,17 @@ class TestValidateConstraints(unittest.TestCase):
             'root-disk': '1G',
             'container': 'lxc',
         }
-        self.assertEqual(constraints, validate_constraints(constraints))
+        self.assertEqual(constraints, parse_constraints(constraints))
 
     def test_valid_constraints_subset(self):
         # A subset of valid constraints is returned as it is.
         constraints = {'cpu-cores': '4', 'cpu-power': 2}
-        self.assertEqual(constraints, validate_constraints(constraints))
+        self.assertEqual(constraints, parse_constraints(constraints))
 
     def test_invalid_constraints(self):
         # A ValueError is raised if unsupported constraints are found.
         with self.assertRaises(ValueError) as context_manager:
-            validate_constraints({'arch': 'i386', 'not-valid': 'bang!'})
+            parse_constraints({'arch': 'i386', 'not-valid': 'bang!'})
         self.assertEqual(
             'unsupported constraints: not-valid',
             str(context_manager.exception))
@@ -75,18 +76,18 @@ class TestValidateConstraints(unittest.TestCase):
             'cpu-power': '2',
             'mem': '2000',
         }
-        self.assertEqual(expected, validate_constraints(constraints))
+        self.assertEqual(expected, parse_constraints(constraints))
 
     def test_string_constraints_subset(self):
         # A subset of string constraints is converted to a dict.
         constraints = 'cpu-cores=4 mem=2000'
         expected = {'cpu-cores': '4', 'mem': '2000'}
-        self.assertEqual(expected, validate_constraints(constraints))
+        self.assertEqual(expected, parse_constraints(constraints))
 
     def test_unsupported_string_constraints(self):
         # A ValueError is raised if unsupported string constraints are found.
         with self.assertRaises(ValueError) as context_manager:
-            validate_constraints('cpu-cores=4 invalid1=1 invalid2=2')
+            parse_constraints('cpu-cores=4 invalid1=1 invalid2=2')
         self.assertEqual(
             'unsupported constraints: invalid1, invalid2',
             str(context_manager.exception))
@@ -94,7 +95,29 @@ class TestValidateConstraints(unittest.TestCase):
     def test_invalid_string_constraints(self):
         # A ValueError is raised if an invalid string is passed.
         with self.assertRaises(ValueError) as context_manager:
-            validate_constraints('arch=,cpu-cores=,')
+            parse_constraints('arch=,cpu-cores=,')
         self.assertEqual(
             'invalid constraints: arch=,cpu-cores=,',
             str(context_manager.exception))
+
+    def test_empty_constraints_return_empty_dict(self):
+        constraints = parse_constraints('')
+        self.assertEqual({}, constraints)
+
+
+class TestCheckConstraints(unittest.TestCase):
+
+    def test_space_separated(self):
+        constraints = 'cpu-cores=4 mem=2000 root-disk=1'
+        result = check_constraints(constraints)
+        self.assertTrue(result)
+
+    def test_comma_separated(self):
+        constraints = 'cpu-cores=4,mem=2000,root-disk=1'
+        result = check_constraints(constraints)
+        self.assertFalse(result)
+
+    def test_invalid_separated(self):
+        constraints = 'invalid=4,mem=2000,root-disk=1'
+        result = check_constraints(constraints)
+        self.assertFalse(result)
