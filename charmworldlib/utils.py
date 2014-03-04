@@ -1,5 +1,4 @@
 import collections
-import re
 
 
 # Define a sequence of allowed constraints to be used in the process of
@@ -21,21 +20,14 @@ ALLOWED_CONSTRAINTS = (
 )
 
 
-# Constraints should be a string of the form:
-# 'k1=v1 k2=v2 ... kn=vn'
-# Due to historical reasons, many bundles use a comma-separated list rather
-# than the space-separated list juju-core expects.  This regular expression
-# handles both separators.
-# XXX: BradCrittenden 2014-02-26: The regex is insuffficient to parse the
-# 'tags' constraint that is supported for MaaS deployments as the value is a
-# comma-separated list.
-CONSTRAINTS_REGEX = re.compile('([\w-]+=\w+)[,\s]*?')
-
-
 def parse_constraints(original_constraints):
     """Parse the constraints and validate them.
 
-    constraints is a space-separated string of key=value pairs or a dict.
+    constraints is a string of key=value pairs or a dict.  Due to
+    historical reasons, many bundles use a comma-separated list rather
+    than the space-separated list juju-core expects.  This method
+    handles both separators.
+
     Returns a dict of validated constraints.
     Raises ValueError if one or more constraints is invalid.
     """
@@ -45,11 +37,27 @@ def parse_constraints(original_constraints):
         constraints = constraints.strip()
         if not constraints:
             return {}
-        pairs = CONSTRAINTS_REGEX.findall(constraints)
-        constraints = dict(i.split('=') for i in pairs)
-    if len(constraints) == 0 or not all(constraints.values()):
-        raise ValueError('invalid constraints: {}'.format(
-            original_constraints))
+        #pairs = CONSTRAINTS_REGEX.findall(constraints)
+        num_equals = constraints.count('=')
+        # Comma separation is supported but deprecated.  Attempt splitting on
+        # it first as it yields better results if a mix of commas and spaces
+        # is used.
+        pairs = constraints.split(',')
+        if num_equals != len(pairs):
+            pairs = constraints.split(' ')
+        if num_equals != len(pairs):
+            raise ValueError('invalid constraints: {}'.format(
+                original_constraints))
+
+        constraints = {}
+        for item in pairs:
+            k, v = item.split('=')
+            if v.find(',') != -1:
+                raise ValueError('invalid constraints: {}'.format(
+                    original_constraints))
+
+            constraints[k.strip()] = v.strip()
+
     unsupported = set(constraints).difference(ALLOWED_CONSTRAINTS)
     if unsupported:
         msg = 'unsupported constraints: {}'.format(

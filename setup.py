@@ -8,9 +8,7 @@ from setuptools import setup
 
 setup(
     name='charmworldlib',
-    # The branch for this forked version can be found at:
-    # lp:~bac/charmworldlib/check-constraints
-    version="0.2.4-2-bac",
+    version="0.2.5-1",
     packages=['charmworldlib'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',

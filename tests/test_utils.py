@@ -35,7 +35,7 @@ class TestParseConstraints(unittest.TestCase):
             'unsupported constraints: not-valid',
             str(context_manager.exception))
 
-    def test_string_constraints(self):
+    def test_string_constraints_space_separated(self):
         # String constraints are converted to a dict.
         constraints = 'arch=i386 cpu-cores=4 cpu-power=2 mem=2000'
         expected = {
@@ -46,10 +46,26 @@ class TestParseConstraints(unittest.TestCase):
         }
         self.assertEqual(expected, parse_constraints(constraints))
 
-    def test_string_constraints_subset(self):
-        # A subset of string constraints is converted to a dict.
-        constraints = 'cpu-cores=4 mem=2000'
-        expected = {'cpu-cores': '4', 'mem': '2000'}
+    def test_string_constraints_comma_separated(self):
+        # String constraints are converted to a dict.
+        constraints = 'arch=i386,cpu-cores=4,cpu-power=2,mem=2000'
+        expected = {
+            'arch': 'i386',
+            'cpu-cores': '4',
+            'cpu-power': '2',
+            'mem': '2000',
+        }
+        self.assertEqual(expected, parse_constraints(constraints))
+
+    def test_string_constraints_mixed_separated(self):
+        # String constraints are converted to a dict.
+        constraints = 'arch=i386,  cpu-cores=4, cpu-power=2,mem=2000'
+        expected = {
+            'arch': 'i386',
+            'cpu-cores': '4',
+            'cpu-power': '2',
+            'mem': '2000',
+        }
         self.assertEqual(expected, parse_constraints(constraints))
 
     def test_unsupported_string_constraints(self):
@@ -66,6 +82,23 @@ class TestParseConstraints(unittest.TestCase):
             parse_constraints('arch=,cpu-cores=,')
         self.assertEqual(
             'invalid constraints: arch=,cpu-cores=,',
+            str(context_manager.exception))
+
+    def test_invalid_no_pairs(self):
+        # A ValueError is raised if an invalid string is passed.
+        with self.assertRaises(ValueError) as context_manager:
+            parse_constraints('yo')
+        self.assertEqual(
+            'invalid constraints: yo',
+            str(context_manager.exception))
+
+    def test_not_key_value_pairs_constraints(self):
+        # A ValueError is raised if a string doesn't have the same number of
+        # tokens as '=' characters.
+        with self.assertRaises(ValueError) as context_manager:
+            parse_constraints('arch=1,cpu-cores')
+        self.assertEqual(
+            'invalid constraints: arch=1,cpu-cores',
             str(context_manager.exception))
 
     def test_empty_constraints_return_empty_dict(self):
