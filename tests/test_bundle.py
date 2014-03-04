@@ -3,7 +3,10 @@
 import unittest
 
 from mock import patch
-from charmworldlib.bundle import Bundles, Bundle
+from charmworldlib.bundle import (
+    Bundle,
+    Bundles,
+)
 
 
 class BundlesTest(unittest.TestCase):

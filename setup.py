@@ -3,17 +3,12 @@
 # Copyright 2013 Marco Ceppi.  This software is licensed under the
 # GNU General Public License version 3 (see the file LICENSE).
 
-import ez_setup
-
-
-ez_setup.use_setuptools()
-
 from setuptools import setup
 
 
 setup(
     name='charmworldlib',
-    version="0.2.4-1",
+    version="0.2.5-1",
     packages=['charmworldlib'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',

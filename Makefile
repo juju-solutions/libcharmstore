@@ -1,3 +1,4 @@
+SYSDEPS = python-virtualenv
 VENVS = .venv2 .venv3
 VENV2 = $(word 1, $(VENVS))
 VENV3 = $(word 2, $(VENVS))
@@ -30,6 +31,9 @@ $(VENVS): .pip-cache test-requirements.pip requirements.pip
 
 setup: $(VENVS)
 
+sysdeps:
+	sudo apt-get install --yes $(SYSDEPS)
+
 test: setup
 	$(VENV3)/bin/nosetests -s --verbosity=2
 	$(VENV2)/bin/nosetests -s --verbosity=2 --with-coverage --cover-package=charmworldlib
@@ -48,6 +52,6 @@ clean:
 clean-all: clean
 	rm -rf .pip-cache
 
-.PHONY: setup test lint clean clean-all install install_2 install_3
+.PHONY: setup sysdeps test lint clean clean-all install install_2 install_3
 
 .DEFAULT_GOAL := all
