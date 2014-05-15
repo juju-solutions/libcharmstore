@@ -38,6 +38,19 @@ class API(object):
 
         return r
 
+    def search(self, endpoint, doctype, criteria=None, limit=None):
+        if type(criteria) is str:
+            criteria = {'text': criteria}
+        else:
+            criteria = criteria or {}
+
+        criteria['text'] = self._doctype_filter(criteria.get('text'), doctype)
+
+        if limit and type(limit) is int:
+            criteria['limit'] = limit
+
+        return self.get(endpoint, criteria)['result'] or []
+
     def _earl(self):
         if self.port:
             return '%s://%s:%s' % (self.protocol, self.server, self.port)
@@ -49,3 +62,11 @@ class API(object):
             endpoint = '/%s' % endpoint
 
         return '%s/api/%s%s' % (self._earl(), self.version, endpoint)
+
+    def _doctype_filter(self, text, doctype):
+        text = (text or '').strip()
+        if not text:
+            return doctype
+        if not text.startswith(doctype + ':'):
+            return '{}:{}'.format(doctype, text)
+        return text
