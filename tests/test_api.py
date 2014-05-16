@@ -78,3 +78,10 @@ class APITests(unittest.TestCase):
     def test_post_params(self, mfetch):
         self.a.post('end/of/the/world', {'isit'})
         mfetch.assert_called_with('end/of/the/world', {'isit'}, 'post')
+
+    def test_doctype_filter(self):
+        f = self.a._doctype_filter
+        self.assertEqual(f(None, 'charm'), 'charm')
+        self.assertEqual(f(' ', 'charm'), 'charm')
+        self.assertEqual(f('searchterm', 'charm'), 'charm:searchterm')
+        self.assertEqual(f(' charm:searchterm', 'charm'), 'charm:searchterm')

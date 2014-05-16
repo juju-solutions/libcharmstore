@@ -1,4 +1,3 @@
-
 import re
 import json
 from . import api
@@ -40,6 +39,7 @@ def parse_charm_id(charm_id):
 class Charms(api.API):
     _base_endpoint = {1: 'charm', 2: 'charm', 3: 'charm'}
     _base_search_endpoint = {1: 'charms', 2: 'charms', 3: 'search'}
+    _doctype = 'charm'
 
     def requires(self, interfaces=[], limit=None):
         return self.interfaces(requires=interfaces)
@@ -73,26 +73,6 @@ class Charms(api.API):
         charm_raw = data['result'][0]
         return Charm.from_charmdata(charm_raw)
 
-    def approved(self):
-        return self.search({'type': 'approved'})
-
-    def search(self, criteria={}, limit=None):
-        results = []
-        if type(criteria) is str:
-            criteria = {'text': criteria}
-        if limit and type(limit) is int:
-            criteria['limit'] = limit
-
-        data = self.get(self._base_search_endpoint[self.version], criteria)
-
-        if not data['result']:
-            return []
-
-        for charm in data['result']:
-            results.append(Charm.from_charmdata(charm))
-
-        return results
-
     def charm_endpoint(self, name, series='precise', revision=None,
                        owner=None):
         if owner and not owner.startswith('~'):
@@ -109,6 +89,17 @@ class Charms(api.API):
             endpoint = "%s-%s" % (endpoint, revision)
 
         return endpoint
+
+    def search(self, criteria=None, limit=None):
+        result = super(Charms, self).search(
+            self._base_search_endpoint[self.version],
+            self._doctype,
+            criteria=criteria,
+            limit=limit)
+        return [Charm.from_charmdata(charm) for charm in result]
+
+    def approved(self):
+        return self.search(criteria={'type': 'approved'})
 
 
 class Charm(object):

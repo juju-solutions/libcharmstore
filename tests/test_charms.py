@@ -17,26 +17,27 @@ class CharmsTests(unittest.TestCase):
         cdata = {'charm': {'id': 'oneiric/charm-0'}}
         mget.return_value = {'result': [cdata]}
         self.assertEqual([mCharm.from_charmdata()], self.c.search())
-        mget.assert_called_with('search', {})
+        mget.assert_called_with('search', {'text': 'charm'})
         mCharm.from_charmdata.assert_called_with(cdata)
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_search_string(self, mget):
         mget.return_value = {'result': None}
         self.assertEqual([], self.c.search('blurb', 2))
-        mget.assert_called_with('search', {'text': 'blurb', 'limit': 2})
+        mget.assert_called_with('search', {'text': 'charm:blurb', 'limit': 2})
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_search_params(self, mget):
         mget.return_value = {'result': None}
         self.assertEqual([], self.c.search({'approved': True}, 1))
-        mget.assert_called_with('search', {'approved': True, 'limit': 1})
+        mget.assert_called_with(
+            'search', {'approved': True, 'limit': 1, 'text': 'charm'})
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_search_no_results(self, mget):
         mget.return_value = {'result': None}
         self.assertEqual([], self.c.search('no-match'))
-        mget.assert_called_with('search', {'text': 'no-match'})
+        mget.assert_called_with('search', {'text': 'charm:no-match'})
 
     @patch('charmworldlib.charm.Charm')
     @patch('charmworldlib.charm.Charms.get')
@@ -45,14 +46,15 @@ class CharmsTests(unittest.TestCase):
         cdata = {'charm': {'id': 'oneiric/charm-0'}}
         mget.return_value = {'result': [cdata]}
         self.assertEqual([mCharm.from_charmdata()], self.c.search())
-        mget.assert_called_with('charms', {})
+        mget.assert_called_with('charms', {'text': 'charm'})
         mCharm.from_charmdata.assert_called_with(cdata)
 
     @patch('charmworldlib.charm.Charms.get')
     def test_charms_approved(self, mget):
         mget.return_value = {'result': None}
         self.assertEqual([], self.c.approved())
-        mget.assert_called_with('search', {'type': 'approved'})
+        mget.assert_called_with(
+            'search', {'type': 'approved', 'text': 'charm'})
 
     @patch('charmworldlib.charm.Charm.from_charmdata')
     @patch('charmworldlib.charm.Charms.get')
