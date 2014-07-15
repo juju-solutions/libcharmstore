@@ -32,7 +32,7 @@ class BundlesTest(unittest.TestCase):
         mget.return_value = {'result': [cdata]}
         self.assertEqual([mBundle.from_bundledata()], self.b.search())
         mget.assert_called_with('search', {'text': 'bundle'})
-        mBundle.from_bundledata.assert_called_with(cdata)
+        mBundle.from_bundledata.assert_called_with(cdata['bundle'])
 
     @patch('charmworldlib.bundle.Bundles.get')
     def test_bundles_search_string(self, mget):
@@ -61,7 +61,7 @@ class BundlesTest(unittest.TestCase):
         mget.return_value = {'result': [cdata]}
         self.assertEqual([mBundle.from_bundledata()], self.b.search())
         mget.assert_called_with('search', {'text': 'bundle'})
-        mBundle.from_bundledata.assert_called_with(cdata)
+        mBundle.from_bundledata.assert_called_with(cdata['bundle'])
 
     @patch('charmworldlib.bundle.Bundles.get')
     def test_bundles_approved(self, mget):

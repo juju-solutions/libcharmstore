@@ -58,7 +58,7 @@ class Bundles(api.API):
             self._doctype,
             criteria=criteria,
             limit=limit)
-        return [Bundle.from_bundledata(bundle) for bundle in result]
+        return [Bundle.from_bundledata(bundle['bundle']) for bundle in result]
 
     def approved(self):
         return self.search(criteria={'type': 'approved'})
