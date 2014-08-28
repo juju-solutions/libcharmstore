@@ -19,6 +19,7 @@ class TestParseConstraints(unittest.TestCase):
             'mem': 2000,
             'root-disk': '1G',
             'container': 'lxc',
+            'tags': 'foo, bar, baz',
         }
         self.assertEqual(constraints, parse_constraints(constraints))
 
@@ -46,6 +47,18 @@ class TestParseConstraints(unittest.TestCase):
         }
         self.assertEqual(expected, parse_constraints(constraints))
 
+    def test_string_constraints_space_separated_with_tags(self):
+        # String constraints are converted to a dict.
+        constraints = 'arch=i386 cpu-cores=4 cpu-power=2 mem=2000 tags=c,a,b'
+        expected = {
+            'arch': 'i386',
+            'cpu-cores': '4',
+            'cpu-power': '2',
+            'mem': '2000',
+            'tags': 'c,a,b',
+        }
+        self.assertEqual(expected, parse_constraints(constraints))
+
     def test_string_constraints_comma_separated(self):
         # String constraints are converted to a dict.
         constraints = 'arch=i386,cpu-cores=4,cpu-power=2,mem=2000'
@@ -56,6 +69,15 @@ class TestParseConstraints(unittest.TestCase):
             'mem': '2000',
         }
         self.assertEqual(expected, parse_constraints(constraints))
+
+    def test_string_constraints_comma_separated_with_tags(self):
+        # Using comma-separated with tags is a no-no.
+        constraints = 'arch=i386,cpu-cores=4,cpu-power=2,mem=2000,tags=a,b,c'
+        with self.assertRaises(ValueError) as context_manager:
+            parse_constraints(constraints)
+        self.assertEqual(
+            'invalid constraints: {}'.format(constraints),
+            str(context_manager.exception))
 
     def test_string_constraints_mixed_separated(self):
         # String constraints are converted to a dict.
