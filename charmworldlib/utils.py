@@ -31,12 +31,17 @@ def parse_constraints(original_constraints):
         constraints = constraints.strip()
         if not constraints:
             return {}
-        #pairs = CONSTRAINTS_REGEX.findall(constraints)
         num_equals = constraints.count('=')
-        # Comma separation is supported but deprecated.  Attempt splitting on
-        # it first as it yields better results if a mix of commas and spaces
-        # is used.
-        pairs = constraints.split(',')
+
+        if 'tags' in constraints:
+            # Tags are comma-separated and force the key,value pairs of the
+            # constraints to be space-separated.
+            pairs = constraints.split(' ')
+        else:
+            # Comma separation is supported but deprecated.  Attempt splitting
+            # on it first as it yields better results if a mix of commas and
+            # spaces is used.
+            pairs = constraints.split(',')
         if num_equals != len(pairs):
             pairs = constraints.split(' ')
         if num_equals != len(pairs):
