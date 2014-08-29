@@ -15,14 +15,16 @@ class APITests(unittest.TestCase):
     def test_fetch_request_get(self, mreq):
         endpoint = 't'
         self.a.fetch_request(endpoint, method='get')
-        mreq.assert_called_with(self.a._build_url(endpoint), params={})
+        mreq.assert_called_with(
+            self.a._build_url(endpoint), params={}, timeout=self.a.timeout)
 
     @patch('requests.get')
     def test_fetch_request_get_params(self, mreq):
         endpoint = 'r/maties'
         params = {'foo': 'bar'}
         self.a.fetch_request(endpoint, method='get', params=params)
-        mreq.assert_called_with(self.a._build_url(endpoint), params=params)
+        mreq.assert_called_with(
+            self.a._build_url(endpoint), params=params, timeout=self.a.timeout)
 
     def test_fetch_request_bad_method(self):
         self.assertRaises(MethodMismatch, self.a.fetch_request, 'bad',
@@ -34,7 +36,8 @@ class APITests(unittest.TestCase):
         params = {'bar': 'baz'}
         self.a.port = 8080
         self.a.fetch_request(endpoint, method='post', params=params)
-        mreq.assert_called_with(self.a._build_url(endpoint), data=params)
+        mreq.assert_called_with(
+            self.a._build_url(endpoint), data=params, timeout=self.a.timeout)
         self.a.port = None
 
     @patch('charmworldlib.api.API.fetch_request')
