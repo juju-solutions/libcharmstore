@@ -10,13 +10,7 @@ ALLOWED_CONSTRAINTS = (
     'cpu-power',
     'mem',
     'root-disk',
-    # XXX: BradCrittenden 2014-02-12:
-    # tags are supported by MaaS only so they are not currently implemented.
-    # It is unclear whether the GUI should support them or not so they are
-    # being left out for now.
-    # Also, tags are a comma-separated, which would clash with the currently
-    # broken constraint parsing in the GUI.
-    # 'tags',
+    'tags',
 )
 
 
@@ -37,12 +31,17 @@ def parse_constraints(original_constraints):
         constraints = constraints.strip()
         if not constraints:
             return {}
-        #pairs = CONSTRAINTS_REGEX.findall(constraints)
         num_equals = constraints.count('=')
-        # Comma separation is supported but deprecated.  Attempt splitting on
-        # it first as it yields better results if a mix of commas and spaces
-        # is used.
-        pairs = constraints.split(',')
+
+        if 'tags' in constraints:
+            # Tags are comma-separated and force the key,value pairs of the
+            # constraints to be space-separated.
+            pairs = constraints.split(' ')
+        else:
+            # Comma separation is supported but deprecated.  Attempt splitting
+            # on it first as it yields better results if a mix of commas and
+            # spaces is used.
+            pairs = constraints.split(',')
         if num_equals != len(pairs):
             pairs = constraints.split(' ')
         if num_equals != len(pairs):
@@ -52,7 +51,7 @@ def parse_constraints(original_constraints):
         constraints = {}
         for item in pairs:
             k, v = item.split('=')
-            if v.find(',') != -1:
+            if v.find(',') != -1 and k != 'tags':
                 raise ValueError('invalid constraints: {}'.format(
                     original_constraints))
 
