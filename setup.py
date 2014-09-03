@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name='charmworldlib',
-    version="0.4.1",
+    version="0.4.2",
     packages=['charmworldlib'],
     maintainer='Marco Ceppi',
     maintainer_email='marco@ceppi.net',
