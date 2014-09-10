@@ -7,12 +7,13 @@ class MethodMismatch(Exception):
 
 class API(object):
     def __init__(self, server='manage.jujucharms.com', version=3, secure=True,
-                 port=None, proxy_info=None):
+                 port=None, proxy_info=None, timeout=45):
         self.server = server
         self.protocol = 'https' if secure else 'http'
         self.port = port
         self.version = version
         self.proxy = proxy_info
+        self.timeout = timeout
 
     def get(self, endpoint, params={}):
         return self.fetch_json(endpoint, params, 'get')
@@ -32,9 +33,11 @@ class API(object):
             raise MethodMismatch('%s is not get or post' % method)
 
         if method == 'post':
-            r = requests.post(self._build_url(endpoint), data=params)
+            r = requests.post(
+                self._build_url(endpoint), data=params, timeout=self.timeout)
         elif method == 'get':
-            r = requests.get(self._build_url(endpoint), params=params)
+            r = requests.get(
+                self._build_url(endpoint), params=params, timeout=self.timeout)
 
         return r
 
