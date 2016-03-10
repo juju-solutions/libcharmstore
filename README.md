@@ -1,1 +1,2 @@
-# Charm World Python Library
+# CharmStore Python Library
+
