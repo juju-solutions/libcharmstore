@@ -111,7 +111,7 @@ class Entity(object):
 
     def file(self, path):
         if path not in self.files:
-            raise IOError(0, 'No such file in %s' self.__class__.__name__.lower(), path)
+            raise IOError(0, 'No such file in %s' % self.__class__.__name__.lower(), path)
 
         return self.theblues._get(self.theblues.file_url(self.url, path)).text
 
