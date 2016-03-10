@@ -1,16 +1,10 @@
-SYSDEPS = python-virtualenv
-VENVS = .venv2 .venv3
-VENV2 = $(word 1, $(VENVS))
-VENV3 = $(word 2, $(VENVS))
+SYSDEPS = python-virtualenv python-tox
 
 %2: PY = python2
 %3: PY = python3
 
 
 all: setup
-
-install_%:
-	@$(PY) setup.py install
 
 install: install_2 install_3
 
@@ -43,7 +37,6 @@ lint: setup
 	$(VENV2)/bin/flake8 --show-source ./charmworldlib
 
 clean:
-	rm -rf $(VENVS)
 	-find . -name __pycache__ -type d | xargs rm -rf {}
 	find . -name '*.py[co]' -delete
 	find . -name '*.bak' -delete
