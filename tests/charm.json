@@ -1,0 +1,253 @@
+{
+  "Meta": {
+    "common-info": {}, 
+    "stats": {
+      "ArchiveDownloadAllRevisions": {
+        "Week": 2, 
+        "Total": 51, 
+        "Day": 1, 
+        "Month": 11
+      }, 
+      "ArchiveDownloadCount": 51, 
+      "ArchiveDownload": {
+        "Week": 2, 
+        "Total": 51, 
+        "Day": 1, 
+        "Month": 11
+      }
+    }, 
+    "bundles-containing": [], 
+    "charm-actions": {
+      "ActionSpecs": null
+    }, 
+    "tags": {
+      "Tags": [
+        "misc"
+      ]
+    }, 
+    "extra-info": {
+      "vcs-revisions": [
+        {
+          "date": "2015-12-04T10:35:14-05:00", 
+          "message": "Merge pull request #28 from tvansteenburgh/master\n\nv1.2.1 Benchmark GUI rename in collector-web", 
+          "revno": "4711927d2f281f804712e2ba39bdb1d44b7518ab", 
+          "authors": [
+            {
+              "email": "marco@ceppi.net", 
+              "name": "Marco Ceppi"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-12-04T10:34:09-05:00", 
+          "message": "v1.2.1 Benchmark GUI rename in collector-web", 
+          "revno": "202192aeb31ecc875044e8e2b2dbf3691f0b6867", 
+          "authors": [
+            {
+              "email": "tvansteenburgh@gmail.com", 
+              "name": "Tim Van Steenburgh"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-11-30T20:55:26-05:00", 
+          "message": "Benchmark GUI", 
+          "revno": "3eae1228498bf5d7d7315f30e9642d3b5befa265", 
+          "authors": [
+            {
+              "email": "marco@ceppi.net", 
+              "name": "Marco Ceppi"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-11-30T20:55:06-05:00", 
+          "message": "New collector-web", 
+          "revno": "42c60c405c6e6353b07ebf0c151d5e05bd1e5fdd", 
+          "authors": [
+            {
+              "email": "marco@ceppi.net", 
+              "name": "Marco Ceppi"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-11-30T20:54:54-05:00", 
+          "message": "No need for collector-worker", 
+          "revno": "1c327022f934f26ced46604184cf7ef4b03b74cd", 
+          "authors": [
+            {
+              "email": "marco@ceppi.net", 
+              "name": "Marco Ceppi"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-11-19T13:05:32-05:00", 
+          "message": "Merge pull request #27 from tvansteenburgh/master\n\nDistribute action-id over collector relation", 
+          "revno": "29e0b6425f523665a505ea5f5b576f615205b179", 
+          "authors": [
+            {
+              "email": "marco@ceppi.net", 
+              "name": "Marco Ceppi"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-11-19T12:11:31-05:00", 
+          "message": "Distribute action-id over collector relation\n\n- Get action-id over benchmark relation, send to all collectors over\n  collector relation\n- Update collector interface name", 
+          "revno": "1cac3d114f50fa95e47938b4e419ec5cca0237fa", 
+          "authors": [
+            {
+              "email": "tvansteenburgh@gmail.com", 
+              "name": "Tim Van Steenburgh"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-22T09:43:14-04:00", 
+          "message": "Merge remote-tracking branch 'upstream/master'", 
+          "revno": "f1755cf2610180e7f218f0e34e5232b6f53dc554", 
+          "authors": [
+            {
+              "email": "tvansteenburgh@gmail.com", 
+              "name": "Tim Van Steenburgh"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-17T08:51:08-04:00", 
+          "message": "Merge pull request #24 from juju-solutions/arosales-readme-updates-1\n\nUpdate local link syntax, cabs expose, and admin password", 
+          "revno": "3ae754fa3e83dccaafaa4b9260588a1e71819e48", 
+          "authors": [
+            {
+              "email": "adam@adamisrael.com", 
+              "name": "Adam Israel"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-17T08:49:49-04:00", 
+          "message": "Merge pull request #25 from juju-solutions/arosales-speedometer-icon\n\nAdd Speedometer Icon", 
+          "revno": "d64c5bc81c58abeb262f0ed0c79567aaf0e49448", 
+          "authors": [
+            {
+              "email": "adam@adamisrael.com", 
+              "name": "Adam Israel"
+            }
+          ]
+        }
+      ]
+    }, 
+    "perm": {
+      "Read": [
+        "everyone"
+      ], 
+      "Write": [
+        "charmers"
+      ]
+    }, 
+    "manifest": [
+      {
+        "Name": "revision", 
+        "Size": 1
+      }, 
+      {
+        "Name": "README.md", 
+        "Size": 6901
+      }, 
+      {
+        "Name": "config.yaml", 
+        "Size": 553
+      }, 
+      {
+        "Name": "metadata.yaml", 
+        "Size": 467
+      }
+    ], 
+    "charm-config": {
+      "Options": {
+        "juju-user": {
+          "Default": "user-admin", 
+          "Type": "string", 
+          "Description": "Juju API User"
+        }, 
+        "juju-secret": {
+          "Default": "", 
+          "Type": "string", 
+          "Description": "Juju Secret for API User"
+        }, 
+        "proxy": {
+          "Default": null, 
+          "Type": "string", 
+          "Description": "Proxy to use when fetching resources from PyPI, if not already set in Juju"
+        }, 
+        "publish-url": {
+          "Default": "", 
+          "Type": "string", 
+          "Description": "\"The url to which benchmark results can be published, e.g., http://cloud-benchmarks.org/submissions. Leave blank to disable publishing.\"\n"
+        }
+      }
+    }, 
+    "revision-info": {
+      "Revisions": [
+        "cs:trusty/benchmark-gui-0"
+      ]
+    }, 
+    "promulgated": {
+      "Promulgated": true
+    }, 
+    "supported-series": {
+      "SupportedSeries": [
+        "trusty"
+      ]
+    }, 
+    "charm-metadata": {
+      "OldRevision": 0, 
+      "Terms": null, 
+      "Description": "Graphical User Interface and metric collection service\n", 
+      "Format": 1, 
+      "Tags": [
+        "misc"
+      ], 
+      "Summary": "Graphical User Interface and metric collection service", 
+      "Provides": {
+        "website": {
+          "Name": "website", 
+          "Limit": 0, 
+          "Scope": "global", 
+          "Interface": "http", 
+          "Role": "provider", 
+          "Optional": false
+        }
+      }, 
+      "Subordinate": false, 
+      "Requires": {
+        "collector": {
+          "Name": "collector", 
+          "Limit": 1, 
+          "Scope": "global", 
+          "Interface": "benchmark-collector", 
+          "Role": "requirer", 
+          "Optional": false
+        }, 
+        "benchmark": {
+          "Name": "benchmark", 
+          "Limit": 1, 
+          "Scope": "global", 
+          "Interface": "benchmark", 
+          "Role": "requirer", 
+          "Optional": false
+        }
+      }, 
+      "Name": "benchmark-gui"
+    }, 
+    "id": {
+      "Series": "trusty", 
+      "Revision": 0, 
+      "Id": "cs:trusty/benchmark-gui-0", 
+      "Name": "benchmark-gui"
+    }
+  }, 
+  "Id": "cs:trusty/benchmark-gui-0"
+}

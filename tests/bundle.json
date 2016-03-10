@@ -1,0 +1,340 @@
+{
+  "Meta": {
+    "bundle-machine-count": {
+      "Count": 9
+    }, 
+    "promulgated": {
+      "Promulgated": true
+    }, 
+    "bundle-unit-count": {
+      "Count": 9
+    }, 
+    "tags": {
+      "Tags": null
+    }, 
+    "extra-info": {
+      "bzr-url": "lp:~charmers/charms/bundles/realtime-syslog-analytics/bundle", 
+      "bzr-digest": "kevin.monroe@canonical.com-20160223185921-yhq7uw90znxvrzwe", 
+      "bzr-revisions": [
+        {
+          "date": "2016-02-23T18:59:21Z", 
+          "message": "  [bigdata-dev] update plugin: use s3 for java-installer, update benchmarks to work in our .venv\n", 
+          "revno": 13, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-12-15T20:49:28Z", 
+          "message": "  [bigdata-dev] bump plugin revno to pin charm-benchmark; update slave mem contraint to same level as masters\n", 
+          "revno": 12, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-21T09:51:00-05:00", 
+          "message": "  [r=cory_fu] update spark revno to retrieve spark binary from our s3 bucket.\n", 
+          "revno": 11, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-08T19:35:54Z", 
+          "message": "  [r=johnsca] update to latest spark charm revision, which rolls spark back to v1.3 due to a zeppelin incompatibility\n", 
+          "revno": 10, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-07T22:36:46Z", 
+          "message": "  [hotfix] we know spark-1.4 is incompatible with our zeppelin at the moment, so lock the spark included with this bundle to spark-1.3\n", 
+          "revno": 9, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-07T21:38:03Z", 
+          "message": "  fixup bundle tests; update bundle.yaml charm revnos to latest promulgated versions\n", 
+          "revno": 8, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-10-02T18:40:34-04:00", 
+          "message": "  [johnsca] Test fixes\n", 
+          "revno": 7, 
+          "authors": [
+            {
+              "email": "tim.van.steenburgh@canonical.com", 
+              "name": "Tim Van Steenburgh"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-09-21T22:52:32-05:00", 
+          "message": "  add revnos to flume, spark, and zepp charms; need to stay on spark-1.3 instead of 1.4 because our current zep is failing to process spark-1.4 jobs in yarn-client mode.\n", 
+          "revno": 6, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-09-18T18:59:05Z", 
+          "message": "  add revnos to main bundle; add dev and local yaml options\n", 
+          "revno": 5, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }, 
+        {
+          "date": "2015-08-18T19:20:42Z", 
+          "message": "  add blurb about exposing Zeppelin (and how to get to it)\n", 
+          "revno": 4, 
+          "authors": [
+            {
+              "email": "kevin.monroe@canonical.com", 
+              "name": "Kevin W. Monroe"
+            }
+          ]
+        }
+      ], 
+      "bzr-owner": "charmers"
+    }, 
+    "perm": {
+      "Read": [
+        "everyone", 
+        "charmers"
+      ], 
+      "Write": [
+        "charmers"
+      ]
+    }, 
+    "manifest": [
+      {
+        "Name": "README.md", 
+        "Size": 2551
+      }, 
+      {
+        "Name": "bundle-dev.yaml", 
+        "Size": 1885
+      }, 
+      {
+        "Name": "bundle-local.yaml", 
+        "Size": 1668
+      }, 
+      {
+        "Name": "bundle.yaml", 
+        "Size": 1789
+      }, 
+      {
+        "Name": "tests/01-bundle.py", 
+        "Size": 8249
+      }, 
+      {
+        "Name": "tests/tests.yaml", 
+        "Size": 34
+      }
+    ], 
+    "revision-info": {
+      "Revisions": [
+        "cs:bundle/realtime-syslog-analytics-13", 
+        "cs:bundle/realtime-syslog-analytics-12", 
+        "cs:bundle/realtime-syslog-analytics-11", 
+        "cs:bundle/realtime-syslog-analytics-10", 
+        "cs:bundle/realtime-syslog-analytics-9", 
+        "cs:bundle/realtime-syslog-analytics-8", 
+        "cs:bundle/realtime-syslog-analytics-7", 
+        "cs:bundle/realtime-syslog-analytics-6"
+      ]
+    }, 
+    "bundle-metadata": {
+      "Services": {
+        "rsyslog-forwarder": {
+          "Charm": "cs:trusty/rsyslog-forwarder-ha-5", 
+          "Annotations": {
+            "gui-y": "600", 
+            "gui-x": "900"
+          }
+        }, 
+        "plugin": {
+          "Charm": "cs:trusty/apache-hadoop-plugin-10", 
+          "Annotations": {
+            "gui-y": "200", 
+            "gui-x": "900"
+          }
+        }, 
+        "compute-slave": {
+          "Constraints": "mem=7G", 
+          "Charm": "cs:trusty/apache-hadoop-compute-slave-9", 
+          "NumUnits": 3, 
+          "Annotations": {
+            "gui-y": "200", 
+            "gui-x": "300"
+          }
+        }, 
+        "secondary-namenode": {
+          "Constraints": "mem=7G", 
+          "Charm": "cs:trusty/apache-hadoop-hdfs-secondary-7", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "600", 
+            "gui-x": "600"
+          }
+        }, 
+        "flume-syslog": {
+          "Charm": "cs:trusty/apache-flume-syslog-3", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "600", 
+            "gui-x": "1200"
+          }
+        }, 
+        "zeppelin": {
+          "Charm": "cs:trusty/apache-zeppelin-5", 
+          "Annotations": {
+            "gui-y": "100", 
+            "gui-x": "1500"
+          }
+        }, 
+        "spark": {
+          "Constraints": "mem=7G", 
+          "Charm": "cs:trusty/apache-spark-6", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "100", 
+            "gui-x": "1200"
+          }
+        }, 
+        "flume-hdfs": {
+          "Charm": "cs:trusty/apache-flume-hdfs-4", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "350", 
+            "gui-x": "1200"
+          }
+        }, 
+        "yarn-master": {
+          "Constraints": "mem=7G", 
+          "Charm": "cs:trusty/apache-hadoop-yarn-master-7", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "100", 
+            "gui-x": "600"
+          }
+        }, 
+        "hdfs-master": {
+          "Constraints": "mem=7G", 
+          "Charm": "cs:trusty/apache-hadoop-hdfs-master-9", 
+          "NumUnits": 1, 
+          "Annotations": {
+            "gui-y": "350", 
+            "gui-x": "600"
+          }
+        }
+      }, 
+      "Series": "trusty", 
+      "Relations": [
+        [
+          "yarn-master", 
+          "hdfs-master"
+        ], 
+        [
+          "secondary-namenode", 
+          "hdfs-master"
+        ], 
+        [
+          "compute-slave", 
+          "yarn-master"
+        ], 
+        [
+          "compute-slave", 
+          "hdfs-master"
+        ], 
+        [
+          "plugin", 
+          "yarn-master"
+        ], 
+        [
+          "plugin", 
+          "hdfs-master"
+        ], 
+        [
+          "flume-hdfs", 
+          "plugin"
+        ], 
+        [
+          "flume-syslog", 
+          "flume-hdfs"
+        ], 
+        [
+          "rsyslog-forwarder", 
+          "hdfs-master"
+        ], 
+        [
+          "rsyslog-forwarder", 
+          "flume-syslog"
+        ], 
+        [
+          "spark", 
+          "plugin"
+        ], 
+        [
+          "zeppelin", 
+          "spark"
+        ]
+      ]
+    }, 
+    "common-info": {}, 
+    "id": {
+      "Series": "bundle", 
+      "Revision": 13, 
+      "Id": "cs:bundle/realtime-syslog-analytics-13", 
+      "Name": "realtime-syslog-analytics"
+    }, 
+    "stats": {
+      "ArchiveDownloadAllRevisions": {
+        "Week": 2, 
+        "Total": 51, 
+        "Day": 0, 
+        "Month": 20
+      }, 
+      "ArchiveDownloadCount": 6, 
+      "ArchiveDownload": {
+        "Week": 2, 
+        "Total": 6, 
+        "Day": 0, 
+        "Month": 6
+      }
+    }
+  }, 
+  "Id": "cs:bundle/realtime-syslog-analytics-13"
+}
