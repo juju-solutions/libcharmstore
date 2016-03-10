@@ -2,5 +2,8 @@
 .venv*/
 .coverage
 dist
-charmworldlib.egg-info
+libcharmstore.egg-info
 */__pycache__
+*.pyc
+*.swp
+.tox
