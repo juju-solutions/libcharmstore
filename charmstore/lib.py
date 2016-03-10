@@ -202,3 +202,47 @@ class Charm(Entity):
 
     def __repr__(self):
         return '<Charm %s>' % self.id
+
+
+class Bundle(Entity):
+    def __init__(self, id=None, api='https://api.jujucharms.com/v4'):
+        self.count = {'machines': 0, 'units': 0}
+        self.relations = []
+        self.services = None
+
+        super(Charm, self).__init__(id, api)
+
+    def load(self, charm_data):
+        if 'charm-metadata' not in charm_data:
+            raise CharmNotFound('Not a valid charm payload')
+
+        super(Charm, self).load(charm_data)
+
+        metadata = self.raw.get('bundle-metadata')
+
+        self.relations = metadata.get('Relations', [])
+        self.series = metadata.get('Series', 'bundle')
+        self.services = metadata.get('Services', {})
+
+        for rel, d in metadata.get('Provides', {}).items():
+            self.provides[rel] = {k.lower(): v for k, v in d.items()}
+
+        for rel, d in metadata.get('Requires', {}).items():
+            self.requires[rel] = {k.lower(): v for k, v in d.items()}
+
+        for rel, d in metadata.get('Peers', {}).items():
+            self.peers[rel] = {k.lower(): v for k, v in d.items()}
+
+        action_spec = self.raw.get('charm-actions', {}).get('ActionSpecs')
+        if action_spec:
+            self.actions = action_spec
+
+        config_options = self.raw.get('charm-config', {}).get('Options')
+        if config_options:
+            self.config = config_options
+
+    def __str__(self):
+        return json.dumps(self.raw, indent=2)
+
+    def __repr__(self):
+        return '<Bundle %s>' % self.id
