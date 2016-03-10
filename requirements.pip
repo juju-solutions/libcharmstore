@@ -1,2 +1,3 @@
 PyYAML==3.10
-requests>=0.8.2
+requests>=2.9.1,<3.0
+theblues>=0.1.1,<1.0
