@@ -113,12 +113,12 @@ class Entity(object):
         if path not in self.files:
             raise IOError(0, 'No such file in %s' % self.__class__.__name__.lower(), path)
 
-        return self.theblues._get(self.theblues.file_url(self.url, path)).text
+        return self.theblues._get(self.theblues.file_url(self.id, path)).text
 
     def load(self, data):
         id = data.get('id', {})
-        self.id = id.get('Id')
-        self.url = id.get('Id').replace('cs:', '')
+        self.id = id.get('Id').replace('cs:', '')
+        self.url = id.get('Id')
         self.name = id.get('Name')
         self.revision = id.get('Revision', 0)
         self.series = id.get('Series')
