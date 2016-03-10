@@ -61,7 +61,9 @@ class CharmStore(object):
         if not includes:
             includes = AVAILABLE_INCLUDES
 
-        result = self.theblues.search(**kwargs)
+        result = self.theblues.search(text, includes, doc_type, limit,
+                                      autocomplete, promulgated_only, tags,
+                                      sort, owner, series)
 
         return [Charm.from_data(charm) for charm in result]
 
