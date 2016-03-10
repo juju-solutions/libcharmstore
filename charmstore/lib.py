@@ -2,10 +2,7 @@ import re
 import json
 
 from theblues import charmstore
-
-
-class CharmNotFound(Exception):
-    pass
+from .error import CharmNotFound
 
 
 AVAILABLE_INCLUDES = [

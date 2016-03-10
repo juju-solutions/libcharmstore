@@ -1,0 +1,3 @@
+
+class CharmNotFound(Exception):
+    pass
