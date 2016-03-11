@@ -11,6 +11,9 @@ setup(
     version="0.0.1",
     packages=['charmstore'],
     maintainer='Marco Ceppi',
+    install_requires=[
+        'theblues>=0.1.1,<1.0',
+    ],
     maintainer_email='marco@ceppi.net',
     description=('Library to access charmstore data'),
     license='LGPL',
