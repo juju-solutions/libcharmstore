@@ -65,7 +65,7 @@ class CharmStore(object):
                                       autocomplete, promulgated_only, tags,
                                       sort, owner, series)
 
-        return [Charm.from_data(charm) for charm in result]
+        return [Charm.from_data(charm.get('Meta')) for charm in result]
 
     def approved(self):
         return self.search(None, promulgated_only=True)
@@ -102,7 +102,7 @@ class Entity(object):
         if id:
             self.load(
                 self.theblues._meta(id.replace('cs:', ''),
-                                    AVAILABLE_INCLUDES)
+                                    AVAILABLE_INCLUDES).get('Meta')
             )
 
     def revisions(self):
