@@ -25,6 +25,8 @@ AVAILABLE_INCLUDES = [
     'id',
 ]
 
+DEFAULT_TIMEOUT = 10
+
 
 class CharmStore(object):
     def __init__(self, api='https://api.jujucharms.com/v4'):
@@ -79,7 +81,7 @@ class Entity(object):
 
         return e
 
-    def __init__(self, id=None, api='https://api.jujucharms.com/v4'):
+    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
         self.id = None
         self.name = None
         self.owner = None
@@ -97,7 +99,7 @@ class Entity(object):
         self.stats = {}
 
         self.raw = {}
-        self.theblues = charmstore.CharmStore(api)
+        self.theblues = charmstore.CharmStore(timeout=timeout)
 
         if id:
             self.load(
@@ -137,7 +139,7 @@ class Entity(object):
 
 
 class Charm(Entity):
-    def __init__(self, id=None, api='https://api.jujucharms.com/v4'):
+    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
         self.summary = None
         self.description = None
 
@@ -152,7 +154,7 @@ class Charm(Entity):
         self.bundles = []
         self.terms = []
 
-        super(Charm, self).__init__(id, api)
+        super(Charm, self).__init__(id, timeout)
 
     def related(self):
         data = self.raw.get('charm-related')
@@ -205,12 +207,12 @@ class Charm(Entity):
 
 
 class Bundle(Entity):
-    def __init__(self, id=None, api='https://api.jujucharms.com/v4'):
+    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
         self.count = {'machines': 0, 'units': 0}
         self.relations = []
         self.services = None
 
-        super(Charm, self).__init__(id, api)
+        super(Charm, self).__init__(id, timeout)
 
     def load(self, charm_data):
         if 'charm-metadata' not in charm_data:
