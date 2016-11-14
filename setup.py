@@ -8,11 +8,11 @@ from setuptools import setup
 
 setup(
     name='libcharmstore',
-    version='0.0.3',
+    version='0.0.4',
     packages=['charmstore'],
     maintainer='Marco Ceppi',
     install_requires=[
-        'theblues>=0.1.1,<1.0',
+        'theblues>=0.3.7,<1.0',
     ],
     maintainer_email='marco@ceppi.net',
     description=('Library to access charmstore data'),
