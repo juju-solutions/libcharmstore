@@ -26,12 +26,13 @@ AVAILABLE_INCLUDES = [
 ]
 
 DEFAULT_TIMEOUT = 10
+DEFAULT_CS_API_URL = 'https://api.jujucharms.com/v4'
 
 
 class CharmStore(object):
-    def __init__(self, api='https://api.jujucharms.com/v4'):
+    def __init__(self, api=DEFAULT_CS_API_URL):
         super(CharmStore, self).__init__()
-        self.theblues = charmstore.CharmStore(api)
+        self.theblues = charmstore.CharmStore(url=api)
 
     def requires(self, interfaces=[], limit=None):
         return self.interfaces(requires=interfaces)
@@ -81,7 +82,8 @@ class Entity(object):
 
         return e
 
-    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
+    def __init__(self, id=None, api=DEFAULT_CS_API_URL,
+                 timeout=DEFAULT_TIMEOUT):
         self.id = None
         self.name = None
         self.owner = None
@@ -99,7 +101,7 @@ class Entity(object):
         self.stats = {}
 
         self.raw = {}
-        self.theblues = charmstore.CharmStore(timeout=timeout)
+        self.theblues = charmstore.CharmStore(url=api, timeout=timeout)
 
         if id:
             self.load(
@@ -139,7 +141,8 @@ class Entity(object):
 
 
 class Charm(Entity):
-    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
+    def __init__(self, id=None, api=DEFAULT_CS_API_URL,
+                 timeout=DEFAULT_TIMEOUT):
         self.summary = None
         self.description = None
 
@@ -154,7 +157,7 @@ class Charm(Entity):
         self.bundles = []
         self.terms = []
 
-        super(Charm, self).__init__(id, timeout)
+        super(Charm, self).__init__(id, api=api, timeout=timeout)
 
     def related(self):
         data = self.raw.get('charm-related')
