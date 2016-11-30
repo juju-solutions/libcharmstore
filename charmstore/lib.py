@@ -1,3 +1,4 @@
+import os
 import re
 import json
 
@@ -30,8 +31,10 @@ DEFAULT_CS_API_URL = 'https://api.jujucharms.com/v4'
 
 
 class CharmStore(object):
-    def __init__(self, api=DEFAULT_CS_API_URL):
+    def __init__(self, api=None):
         super(CharmStore, self).__init__()
+        if not api:
+            api = os.environ.get('CS_API_URL', DEFAULT_CS_API_URL)
         self.theblues = charmstore.CharmStore(url=api)
 
     def requires(self, interfaces=[], limit=None):
@@ -82,8 +85,11 @@ class Entity(object):
 
         return e
 
-    def __init__(self, id=None, api=DEFAULT_CS_API_URL,
-                 timeout=DEFAULT_TIMEOUT):
+    def __init__(self, id=None, api=None, timeout=None):
+        if not api:
+            api = os.environ.get('CS_API_URL', DEFAULT_CS_API_URL)
+        if not timeout:
+            timeout = float(os.environ.get('CS_API_TIMEOUT', DEFAULT_TIMEOUT))
         self.id = None
         self.name = None
         self.owner = None
@@ -141,8 +147,7 @@ class Entity(object):
 
 
 class Charm(Entity):
-    def __init__(self, id=None, api=DEFAULT_CS_API_URL,
-                 timeout=DEFAULT_TIMEOUT):
+    def __init__(self, id=None, api=None, timeout=None):
         self.summary = None
         self.description = None
 
@@ -210,7 +215,7 @@ class Charm(Entity):
 
 
 class Bundle(Entity):
-    def __init__(self, id=None, timeout=DEFAULT_TIMEOUT):
+    def __init__(self, id=None, timeout=None):
         self.count = {'machines': 0, 'units': 0}
         self.relations = []
         self.services = None
