@@ -1,8 +1,8 @@
 import os
-import re
 import json
 
 from theblues import charmstore
+from theblues.utils import API_URL
 from .error import CharmNotFound
 
 
@@ -27,7 +27,7 @@ AVAILABLE_INCLUDES = [
 ]
 
 DEFAULT_TIMEOUT = 10
-DEFAULT_CS_API_URL = 'https://api.jujucharms.com/v4'
+DEFAULT_CS_API_URL = API_URL
 
 
 class CharmStore(object):
@@ -121,7 +121,10 @@ class Entity(object):
 
     def file(self, path):
         if path not in self.files:
-            raise IOError(0, 'No such file in %s' % self.__class__.__name__.lower(), path)
+            raise IOError(
+                0,
+                'No such file in %s' % self.__class__.__name__.lower(),
+                path)
 
         return self.theblues._get(self.theblues.file_url(self.id, path)).text
 
