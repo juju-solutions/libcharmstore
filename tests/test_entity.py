@@ -37,7 +37,7 @@ class EntityTests(unittest.TestCase):
         charmstore.lib.Entity.from_data(CHARM.get('Meta'))
         _charmstore.CharmStore.assert_called_once_with(
             timeout=10.0,
-            url='https://api.jujucharms.com/v4')
+            url='https://api.jujucharms.com/charmstore/v5')
 
     @patch.dict(charmstore.lib.os.environ, {
         'CS_API_URL': 'alturl',
