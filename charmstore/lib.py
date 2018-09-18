@@ -17,7 +17,6 @@ AVAILABLE_INCLUDES = [
     'common-info',
     'extra-info',
     'revision-info',
-    'stats',
     'supported-series',
     'manifest',
     'tags',
