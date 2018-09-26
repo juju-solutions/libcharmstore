@@ -7,21 +7,13 @@ from .error import CharmNotFound
 
 
 AVAILABLE_INCLUDES = [
-    'bundle-machine-count',
     'bundle-metadata',
-    'bundle-unit-count',
-    'bundles-containing',
     'charm-actions',
     'charm-config',
     'charm-metadata',
-    'common-info',
     'extra-info',
-    'revision-info',
-    'supported-series',
-    'manifest',
     'tags',
     'promulgated',
-    'perm',
     'id',
 ]
 
@@ -95,13 +87,14 @@ class Entity(object):
         self.series = None
         self.maintainer = None
         self.revision = None
+        self.revisions = None
         self.url = None
 
         self.approved = False
         self.tags = None
         self.source = None
 
-        self.files = []
+        self.files = None
 
         self.stats = {}
 
@@ -115,10 +108,17 @@ class Entity(object):
             )
 
     def revisions(self):
-        data = self.raw.get('revision-info', {}).get('Revisions', [])
+        if self.revisions is None:
+            self.revisions = self.theblues._meta(self.id, ['revision-info']) \
+                or {}
+        data = self.revisions.get('Revisions', [])
         return [self.__class__(e) for e in data]
 
     def file(self, path):
+        if self.files is None:
+            self.files = [
+                f.get('Name') for f in
+                    self.theblues._meta(self.id, ['manifest']) ]
         if path not in self.files:
             raise IOError(
                 0,
