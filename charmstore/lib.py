@@ -94,7 +94,8 @@ class Entity(object):
         self.tags = None
         self.source = None
 
-        self.files = None
+        self._files_fetched = False
+        self.files = []
 
         self.stats = {}
 
@@ -115,10 +116,11 @@ class Entity(object):
         return [self.__class__(e) for e in data]
 
     def file(self, path):
-        if self.files is None:
+        if self._files_fetched is False:
             self.files = [
                 f.get('Name') for f in
                     self.theblues._meta(self.id, ['manifest']) ]
+            self._files_fetched = True
         if path not in self.files:
             raise IOError(
                 0,
