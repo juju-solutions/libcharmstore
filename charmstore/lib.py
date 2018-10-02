@@ -87,7 +87,7 @@ class Entity(object):
         self.series = None
         self.maintainer = None
         self.revision = None
-        self.revisions = None
+        self._revisions = None
         self.url = None
 
         self.approved = False
