@@ -109,10 +109,10 @@ class Entity(object):
             )
 
     def revisions(self):
-        if self.revisions is None:
-            self.revisions = self.theblues._meta(self.id, ['revision-info']) \
+        if self._revisions is None:
+            self._revisions = self.theblues._meta(self.id, ['revision-info']) \
                 or {}
-        data = self.revisions.get('Revisions', [])
+        data = self._revisions.get('Revisions', [])
         return [self.__class__(e) for e in data]
 
     def file(self, path):
