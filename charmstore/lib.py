@@ -6,7 +6,7 @@ from theblues.utils import API_URL
 from .error import CharmNotFound
 
 
-AVAILABLE_INCLUDES = [
+DEFAULT_INCLUDES = [
     'bundle-metadata',
     'charm-actions',
     'charm-config',
@@ -56,7 +56,7 @@ class CharmStore(object):
                sort=None, owner=None, series=None):
 
         if not includes:
-            includes = AVAILABLE_INCLUDES
+            includes = DEFAULT_INCLUDES
 
         result = self.theblues.search(text, includes, doc_type, limit,
                                       autocomplete, promulgated_only, tags,
@@ -105,7 +105,7 @@ class Entity(object):
         if id:
             self.load(
                 self.theblues._meta(id.replace('cs:', ''),
-                                    AVAILABLE_INCLUDES).get('Meta')
+                                    DEFAULT_INCLUDES).get('Meta')
             )
 
     def revisions(self):
