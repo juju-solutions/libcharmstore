@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name='libcharmstore',
-    version='0.0.8',
+    version='0.0.9',
     packages=['charmstore'],
     maintainer='Marco Ceppi',
     install_requires=[
