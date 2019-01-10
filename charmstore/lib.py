@@ -6,22 +6,14 @@ from theblues.utils import API_URL
 from .error import CharmNotFound
 
 
-AVAILABLE_INCLUDES = [
-    'bundle-machine-count',
+DEFAULT_INCLUDES = [
     'bundle-metadata',
-    'bundle-unit-count',
-    'bundles-containing',
     'charm-actions',
     'charm-config',
     'charm-metadata',
-    'common-info',
     'extra-info',
-    'revision-info',
-    'supported-series',
-    'manifest',
     'tags',
     'promulgated',
-    'perm',
     'id',
 ]
 
@@ -64,7 +56,7 @@ class CharmStore(object):
                sort=None, owner=None, series=None):
 
         if not includes:
-            includes = AVAILABLE_INCLUDES
+            includes = DEFAULT_INCLUDES
 
         result = self.theblues.search(text, includes, doc_type, limit,
                                       autocomplete, promulgated_only, tags,
@@ -95,12 +87,14 @@ class Entity(object):
         self.series = None
         self.maintainer = None
         self.revision = None
+        self._revisions = None
         self.url = None
 
         self.approved = False
         self.tags = None
         self.source = None
 
+        self._files_fetched = False
         self.files = []
 
         self.stats = {}
@@ -111,14 +105,22 @@ class Entity(object):
         if id:
             self.load(
                 self.theblues._meta(id.replace('cs:', ''),
-                                    AVAILABLE_INCLUDES).get('Meta')
+                                    DEFAULT_INCLUDES).get('Meta')
             )
 
     def revisions(self):
-        data = self.raw.get('revision-info', {}).get('Revisions', [])
+        if self._revisions is None:
+            self._revisions = self.theblues._meta(self.id, ['revision-info']) \
+                or {}
+        data = self._revisions.get('Revisions', [])
         return [self.__class__(e) for e in data]
 
     def file(self, path):
+        if self._files_fetched is False:
+            self.files = [
+                f.get('Name') for f in
+                    self.theblues._meta(self.id, ['manifest']) ]
+            self._files_fetched = True
         if path not in self.files:
             raise IOError(
                 0,
